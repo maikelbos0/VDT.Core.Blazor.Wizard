@@ -8,14 +8,16 @@
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.Blazor.Wizard</PackageId>
-		<Version>1.0</Version>
+		<Version>1.0.1</Version>
 		<Title>VDT.Core.Blazor.Wizard</Title>
 		<Description>Blazor component that helps you create wizard components with sequential steps, forward/back navigation, conditional completion of steps, step- and wizard-level events, and more</Description>
+		<PackageReleaseNotes>- Referenced README in NuGet package
+- Moved project to separate repository</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2022 Maikel Bos</Copyright>
 		<PackageTags>Blazor component, blazor, wizard, setup assistant, assistant, sequence, steps</PackageTags>
-		<PackageProjectUrl>https://github.com/maikelbos0/VDT.Core</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/maikelbos0/VDT.Core.Blazor.Wizard</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	</PropertyGroup>
