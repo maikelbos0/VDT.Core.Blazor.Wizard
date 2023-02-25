@@ -97,7 +97,7 @@ jobs:
       if: github.event_name == 'push'
       run: |
         current_version=$(grep -Po "\d+\.\d+\.\d+" <<< $(find . -name "*.nupkg"))
-        published_versions=$(curl -s https://api.nuget.org/v3-flatcontainer/vdt.core.blazor.Wizard/index.json | jq '.versions')
+        published_versions=$(curl -s https://api.nuget.org/v3-flatcontainer/vdt.core.blazor.wizard/index.json | jq '.versions')
         if [[ $published_versions != *\""$current_version"\"* ]]
         then
           echo "Publishing version $current_version"                
