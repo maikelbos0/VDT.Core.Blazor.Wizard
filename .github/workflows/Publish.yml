@@ -1,0 +1,105 @@
+name: Build & publish package
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  Publish:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Checkout 
+      uses: actions/checkout@v3
+      with:
+        repository: maikelbos0/ActionHelpers
+        path: 'helpers'
+
+    - name: Install tools
+      run: |
+        sudo apt-get install -y xsltproc
+        sudo apt-get install -y xmlstarlet
+
+    - name: Setup .NET 5
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Restore
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    - name: Test
+      run: dotnet test --configuration Release --no-build --logger "trx;LogFileName=test-results.trx" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=TestResults/coverage-results.xml
+
+    - name: Publish test results
+      if: always()
+      run: |
+        summary=''
+        conclusion='success'
+        for file in $(find '.' -name "*.trx" | sort)
+        do
+          name=$(grep -Po '(?<=\./).*?(?=/)' <<< $file)
+          results=$(xsltproc --stringparam name "$name" '../helpers/test-results.xslt' "$file")          
+          summary="$summary$results"
+          if [[ $(xmlstarlet sel -N x="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" -t -c 'count(//x:UnitTestResult[@outcome="Failed"])' -n "$file") != '0' ]]
+          then 
+            conclusion='failure'
+          fi
+        done
+        sha=$(cat '${{ github.event_path }}' | jq -r 'if .pull_request.head.sha then .pull_request.head.sha else .after end')
+        request=$(jq --null-input --arg sha "$sha" --arg conclusion "$conclusion" --arg summary "$summary" '{"name":"Test results","head_sha":$sha,"status":"completed","conclusion":$conclusion,"output":{"title":"Test results","summary":$summary}}')
+        curl -s -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/maikelbos0/VDT.Core.Blazor.Wizard/check-runs -d "$request"
+
+    - name: Publish code coverage results
+      if: always()
+      run: |
+        summary=''
+        threshold=$((75))
+        conclusion='success'
+        for file in $(find '.' -name "*coverage*.xml" | sort)
+        do
+          name=$(grep -Po '(?<=\./).*?(?=/)' <<< $file)
+          results=$(xsltproc --stringparam name "$name" --stringparam threshold "$threshold" '../helpers/coverage-results.xslt' "$file")
+          summary="$summary$results"
+          if [[ $(($(xmlstarlet sel -t -c 'round(number(/coverage/@line-rate) * 100)' -n "$file"))) -lt $threshold ]]
+          then
+            conclusion='failure'
+          elif [[ $(($(xmlstarlet sel -t -c 'round(number(/coverage/@branch-rate) * 100)' -n "$file"))) -lt $threshold ]]
+          then
+            conclusion='failure'
+          fi          
+        done
+        sha=$(cat '${{ github.event_path }}' | jq -r 'if .pull_request.head.sha then .pull_request.head.sha else .after end')
+        request=$(jq --null-input --arg sha "$sha" --arg conclusion "$conclusion" --arg summary "$summary" '{"name":"Code coverage results","head_sha":$sha,"status":"completed","conclusion":$conclusion,"output":{"title":"Code coverage results","summary":$summary}}')
+        curl -s -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/maikelbos0/VDT.Core.Blazor.Wizard/check-runs -d "$request"
+        if [[ $conclusion = 'failure' ]]
+        then
+          exit 1
+        fi
+
+    - name: Publish package
+      if: github.event_name == 'push'
+      run: |
+        current_version=$(grep -Po "\d+\.\d+\.\d+" <<< $(find . -name "*.nupkg"))
+        published_versions=$(curl -s https://api.nuget.org/v3-flatcontainer/vdt.core.blazor.Wizard/index.json | jq '.versions')
+        if [[ $published_versions != *\""$current_version"\"* ]]
+        then
+          echo "Publishing version $current_version"                
+          dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGETAPIKEY }} --source https://api.nuget.org/v3/index.json
+        fi
