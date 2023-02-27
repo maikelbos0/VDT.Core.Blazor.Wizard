@@ -8,8 +8,9 @@
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.Blazor.Wizard</PackageId>
-		<Version>2.0.0</Version>
+		<Version>2.0.1</Version>
 		<Title>VDT.Core.Blazor.Wizard</Title>
+		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component that helps you create wizard components with sequential steps, forward/back navigation, conditional completion of steps, step- and wizard-level events, and more</Description>
 		<PackageReleaseNotes>- Changed supported .NET version from 5 to 6/7</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
@@ -31,6 +32,7 @@
 
 	<ItemGroup>
 		<None Include="README.md" pack="true" PackagePath="." />
+		<None Include="icon_128.png" pack="true" PackagePath="." />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetFramework) == 'net6.0'">
