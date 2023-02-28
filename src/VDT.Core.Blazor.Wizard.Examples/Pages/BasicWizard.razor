@@ -32,23 +32,55 @@
         <Steps>
             <WizardStep Title="Introduction">
                 <p>
-                    This is a wizard. Please click next to continue.
+                    This is an example wizard for multi step account creation. Please click next to continue.
                 </p>
             </WizardStep>
-            <WizardStep Title="Information required">
+            <WizardStep Title="Your account">
                 <p>
-                    Please fill out the form below.
+                    Please fill out the form below to create an account.
+                </p>
+
+                <EditForm Model="Account">
+                    <div class="mb-3">
+                        <label for="accountDisplayName" class="form-label">Display name</label>
+                        <InputText @bind-Value="Account.DisplayName" id="accountDisplayName" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="accountEmailAddress" class="form-label">Email address</label>
+                        <InputText @bind-Value="Account.EmailAddress" id="accountEmailAddress" class="form-control" placeholder="name@example.com" />
+                    </div>
+                </EditForm>
+            </WizardStep>
+            <WizardStep Title="Preferences">
+                <p>
+                    Please select your preferences.
                 </p>
             </WizardStep>
             <WizardStep Title="Summary">
                 <p>
-                    See below for a summary of the supplied information.
+                    Please check your account information below before submitting.
                 </p>
+
+                <ul>
+                    <li>Display name: @Account.DisplayName</li>
+                    <li>Email address: @Account.EmailAddress</li>
+                </ul>
             </WizardStep>
         </Steps>
     </Wizard>
 </div>
 
 @code {
-    public Wizard? Wizard { get; set; }
+    private Wizard? Wizard { get; set; }
+    private AccountModel Account { get; }
+
+    public BasicWizard() {
+        Account = new();
+    }
+
+    private class AccountModel {
+        public string? DisplayName { get; set; }
+        public string? EmailAddress { get; set; }
+    }
 }
