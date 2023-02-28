@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VDT.Core.Blazor.Wizard", "V
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VDT.Core.Blazor.Wizard.Tests", "VDT.Core.Blazor.Wizard.Tests\VDT.Core.Blazor.Wizard.Tests.csproj", "{394B2145-FBCE-4DB8-AF57-30876F7CCB22}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VDT.Core.Blazor.Wizard.Examples", "VDT.Core.Blazor.Wizard.Examples\VDT.Core.Blazor.Wizard.Examples.csproj", "{B0FB2D66-8B53-4A6D-B482-76C1F1C392A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VDT.Core.Blazor.Wizard.Examples", "VDT.Core.Blazor.Wizard.Examples\VDT.Core.Blazor.Wizard.Examples.csproj", "{B0FB2D66-8B53-4A6D-B482-76C1F1C392A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
