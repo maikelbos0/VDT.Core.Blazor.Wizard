@@ -35,20 +35,25 @@
                     This is an example wizard for multi step account creation. Please click next to continue.
                 </p>
             </WizardStep>
-            <WizardStep Title="Your account">
+            <WizardStep Title="Your account" OnTryComplete="args => args.IsCancelled = !AccountContext.Validate()">
                 <p>
-                    Please fill out the form below to create an account.
+                    Please fill out the form below to create an account. These fields are required and the wizard will not continue if you don't fill out this
+                    section.
                 </p>
 
-                <EditForm Model="Account">
+                <EditForm EditContext="AccountContext">
+                    <DataAnnotationsValidator />
+
                     <div class="mb-3">
                         <label for="accountDisplayName" class="form-label">Display name</label>
                         <InputText @bind-Value="Account.DisplayName" id="accountDisplayName" class="form-control" />
+                        <ValidationMessage For="() => Account.DisplayName" class="text-danger fs-6" />
                     </div>
 
                     <div class="mb-3">
                         <label for="accountEmailAddress" class="form-label">Email address</label>
                         <InputText @bind-Value="Account.EmailAddress" id="accountEmailAddress" class="form-control" placeholder="name@example.com" />
+                        <ValidationMessage For="() => Account.EmailAddress" class="text-danger fs-6" />
                     </div>
                 </EditForm>
             </WizardStep>
@@ -73,14 +78,21 @@
 
 @code {
     private Wizard? Wizard { get; set; }
+
     private AccountModel Account { get; }
+    private EditContext AccountContext { get; }
 
     public BasicWizard() {
         Account = new();
+        AccountContext = new(Account);
     }
 
     private class AccountModel {
+        [Required(ErrorMessage = "Please enter a display name")]
         public string? DisplayName { get; set; }
+
+        [Required(ErrorMessage = "Please enter your email address")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address")]
         public string? EmailAddress { get; set; }
     }
 }
