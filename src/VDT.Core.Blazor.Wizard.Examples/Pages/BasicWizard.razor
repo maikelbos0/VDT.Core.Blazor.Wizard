@@ -61,6 +61,21 @@
                 <p>
                     Please select your preferences.
                 </p>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="accountShowOnlineStatus" @bind="Account.ShowOnlineStatus" />
+                    <label class="form-check-label" for="accountShowOnlineStatus">Show online status</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="accountSendNotifications" @bind="Account.SendNotifications" />
+                    <label class="form-check-label" for="accountSendNotifications">Send notifications</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="accountUseDarkTheme" @bind="Account.UseDarkTheme" />
+                    <label class="form-check-label" for="accountUseDarkTheme">Use dark theme</label>
+                </div>
             </WizardStep>
             <WizardStep Title="Summary">
                 <p>
@@ -70,6 +85,18 @@
                 <ul>
                     <li>Display name: @Account.DisplayName</li>
                     <li>Email address: @Account.EmailAddress</li>
+
+                    @if (Account.ShowOnlineStatus) {
+                        <li>Show online status</li>
+                    }
+
+                    @if (Account.SendNotifications) {
+                        <li>Send notifications</li>
+                    }
+
+                    @if (Account.UseDarkTheme) {
+                        <li>Use dark theme</li>
+                    }
                 </ul>
             </WizardStep>
         </Steps>
@@ -94,5 +121,11 @@
         [Required(ErrorMessage = "Please enter your email address")]
         [EmailAddress(ErrorMessage = "Please enter a valid email address")]
         public string? EmailAddress { get; set; }
+
+        public bool ShowOnlineStatus { get; set; }
+
+        public bool SendNotifications { get; set; }
+
+        public bool UseDarkTheme { get; set; }
     }
 }
