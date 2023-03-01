@@ -1,0 +1,55 @@
+﻿@page "/Events"
+
+<h1>Events</h1>
+
+<p>
+    You can subscribe to several events during the wizard's life cycle. <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example wizard.</a>
+</p>
+
+<div class="card">
+    <Wizard @ref="Wizard"
+            ContainerClass="card-body"
+            TitleContainerClass="card-title mb-3"
+            StepTitleContainerClass="mb-3 d-flex"
+            StepTitleClass="me-3"
+            ActiveStepTitleClass="fw-bold"
+            AllowCancel="true"
+            AllowPrevious="true"
+            ButtonContainerClass="mb-3 btn-group align-content-end"
+            ButtonClass="btn"
+            ButtonCancelClass="btn-secondary"
+            ButtonCancelText="Stop"
+            ButtonPreviousClass="btn-secondary"
+            ButtonPreviousText="<< Prev"
+            ButtonFinishClass="btn-primary"
+            ButtonFinishText="Complete"
+            ButtonNextClass="btn-primary"
+            ButtonNextText="Next >>">
+        <TitleContent>
+            <h2>Wizard title</h2>
+        </TitleContent>
+        <Steps>
+            <WizardStep Title="Introduction">
+                <p>
+                    This is an example wizard to demonstrate events. Please click next to continue.
+                </p>
+            </WizardStep>
+            <WizardStep Title="Completing a step">
+                <p>
+                    The <code>OnTryComplete</code> event allows you to cancel completion of a step, to allow things such as form validation or active
+                    acknowledgement of information.
+                </p>
+            </WizardStep>
+            <WizardStep Title="Conclusion">
+                <p>
+                    This is the last step in the example wizard.
+                </p>
+            </WizardStep>
+        </Steps>
+    </Wizard>
+</div>
+
+@code {
+    private Wizard? Wizard { get; set; }
+
+}
