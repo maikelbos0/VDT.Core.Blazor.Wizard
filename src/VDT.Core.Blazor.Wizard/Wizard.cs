@@ -126,19 +126,19 @@ namespace VDT.Core.Blazor.Wizard {
         public bool IsActive => ActiveStepIndex.HasValue;
 
         /// <summary>
-        /// A callback that will be invoked when this wizard is started
+        /// A callback that will be invoked when the wizard is started
         /// </summary>
         [Parameter]
         public EventCallback<WizardStartedEventArgs> OnStart { get; set; }
 
         /// <summary>
-        /// A callback that will be invoked when this wizard is stopped
+        /// A callback that will be invoked when the wizard is stopped
         /// </summary>
         [Parameter]
         public EventCallback<WizardStoppedEventArgs> OnStop { get; set; }
 
         /// <summary>
-        /// A callback that will be invoked when this wizard is finished because all steps of the wizard have been completed
+        /// A callback that will be invoked when the wizard is finished because all steps of the wizard have been completed
         /// </summary>
         [Parameter]
         public EventCallback<WizardFinishedEventArgs> OnFinish { get; set; }

@@ -6,6 +6,33 @@
     You can subscribe to several events during the wizard's life cycle. <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example wizard.</a>
 </p>
 
+<ul>
+    <li>
+        The <code>Wizard.OnStart</code> event fires when the wizard is started.
+    </li>
+    <li>
+        The <code>Wizard.OnStop</code> event fires when the wizard is stopped.
+    </li>
+    <li>
+        The <code>Wizard.OnFinish</code> event fires when the wizard is finished because all steps of the wizard have been completed.
+    </li>
+    <li>
+        The <code>WizardStep.OnInitialize</code> event fires when a step is rendered.
+    </li>
+    <li>
+        The <code>WizardStep.OnTryComplete</code> event fires when a step is completed by clicking the Next button. The provided 
+        <code>WizardStepAttemptedCompleteEventArgs</code> allows you to cancel completion of a step.
+    </li>
+</ul>
+
+<h2>Handling events</h2>
+
+<p>
+    Handling events is done with the default Blazor <code>EventCallback</code> struct, so that events can be handled either synchronously or asynchronously,
+    and handlers can to omit the event argument parameter if it is unused. For more information regarding Blazor event handling see the official
+    <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor/components/event-handling">Microsoft documentation on Blazor event handling</a>.
+</p>
+
 <div class="card">
     <Wizard @ref="Wizard"
             ContainerClass="card-body"
@@ -18,20 +45,16 @@
             ButtonContainerClass="mb-3 btn-group align-content-end"
             ButtonClass="btn"
             ButtonCancelClass="btn-secondary"
-            ButtonCancelText="Stop"
             ButtonPreviousClass="btn-secondary"
-            ButtonPreviousText="<< Prev"
             ButtonFinishClass="btn-primary"
-            ButtonFinishText="Complete"
-            ButtonNextClass="btn-primary"
-            ButtonNextText="Next >>">
+            ButtonNextClass="btn-primary">
         <TitleContent>
             <h2>Wizard title</h2>
         </TitleContent>
         <Steps>
             <WizardStep Title="Introduction">
                 <p>
-                    This is an example wizard to demonstrate events. Please click next to continue.
+                    This is an example wizard to demonstrate events.  Please click next to continue.
                 </p>
             </WizardStep>
             <WizardStep Title="Completing a step">
