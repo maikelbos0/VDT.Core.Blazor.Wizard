@@ -33,27 +33,28 @@
     </TitleContent>
     <Layout>
         <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    @context.Title
-                </div>
-            </div>
             <div class="card-header">
-                @context.StepTitles
+                @context.Title
             </div>
-            <div class="card-body">
-                <div class="card-text mb-3">
-                    @context.Content
-                </div>
-                <div class="card-text mb-3 d-flex">
-
-                    @context.ButtonCancel
-
-                    <div class="btn-group">
-                        @context.ButtonPrevious
-                        @context.ButtonNext
-                        @context.ButtonFinish
+            <div>
+                <div class="d-flex align-items-stretch">
+                    <div class="flex-grow-0 border-end bg-light px-3 py-2">
+                        @context.StepTitles
                     </div>
+                    <div class="flex-grow-1 px-3 py-2">
+                        @context.Content
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex">
+                <div class="flex-grow-1">
+                    @context.ButtonCancel
+                </div>
+
+                <div class="flex-grow-0 btn-group">
+                    @context.ButtonPrevious
+                    @context.ButtonNext
+                    @context.ButtonFinish
                 </div>
             </div>
         </div>
@@ -62,6 +63,11 @@
         <WizardStep Title="Introduction">
             <p>
                 This is an example wizard with a custom layout. Please click next to continue.
+            </p>
+        </WizardStep>
+        <WizardStep Title="Your step here">
+            <p>
+                This is the second step in this wizard. Please click next to continue.
             </p>
         </WizardStep>
         <WizardStep Title="Summary">
