@@ -21,7 +21,7 @@
         The <code>WizardStep.OnInitialize</code> event fires when a step is rendered.
     </li>
     <li>
-        The <code>WizardStep.OnTryComplete</code> event fires when a step is completed by clicking the Next button. The provided 
+        The <code>WizardStep.OnTryComplete</code> event fires when a step is completed by clicking the Next button. The provided
         <code>WizardStepAttemptedCompleteEventArgs</code> allows you to cancel completion of a step.
     </li>
 </ul>
@@ -90,17 +90,21 @@
 
     private StringBuilder EventDataBuilder { get; set; } = new();
 
-    private void OnWizardStart(WizardStartedEventArgs args) => EventDataBuilder.AppendLine($"{DateTime.Now:hh:mm:ss}: wizard started");
+    private void OnWizardStart(WizardStartedEventArgs args) => EventDataBuilder.AppendLine($"{DateTime.Now:hh:mm:ss} wizard started");
 
-    private void OnWizardStop(WizardStoppedEventArgs args) => EventDataBuilder.AppendLine($"{DateTime.Now:hh:mm:ss}: wizard stopped");
+    private void OnWizardStop(WizardStoppedEventArgs args) => EventDataBuilder.AppendLine($"{DateTime.Now:hh:mm:ss} wizard stopped");
 
-    private void OnWizardFinish(WizardFinishedEventArgs args) => EventDataBuilder.AppendLine($"{DateTime.Now:hh:mm:ss}: wizard finished");
+    private void OnWizardFinish(WizardFinishedEventArgs args) => EventDataBuilder.AppendLine($"{DateTime.Now:hh:mm:ss} wizard finished");
 
-    private void OnWizardStepInitialize(int step, WizardStepInitializedEventArgs args) => EventDataBuilder.AppendLine($"{DateTime.Now:hh:mm:ss}: wizard step {step} initialized");
+    private void OnWizardStepInitialize(int step, WizardStepInitializedEventArgs args) => EventDataBuilder.AppendLine($"{DateTime.Now:hh:mm:ss} wizard step {step} initialized");
 
     private void OnWizardStepTryComplete(int step, WizardStepAttemptedCompleteEventArgs args) {
-        EventDataBuilder.AppendLine($"{DateTime.Now:hh:mm:ss}: wizard step {step} attempted completion");
-
-        args.IsCancelled = step == 1 && !AllowStepCompletion;
+        if (step == 1 && !AllowStepCompletion) {
+            args.IsCancelled = true;
+            EventDataBuilder.AppendLine($"{DateTime.Now:hh:mm:ss} wizard step {step} attempted completion was cancelled");
+        }
+        else {
+            EventDataBuilder.AppendLine($"{DateTime.Now:hh:mm:ss} wizard step {step} completed");
+        }
     }
 }
