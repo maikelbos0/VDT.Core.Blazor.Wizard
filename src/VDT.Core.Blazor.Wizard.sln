@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VDT.Core.Blazor.Wizard", "V
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VDT.Core.Blazor.Wizard.Tests", "VDT.Core.Blazor.Wizard.Tests\VDT.Core.Blazor.Wizard.Tests.csproj", "{394B2145-FBCE-4DB8-AF57-30876F7CCB22}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VDT.Core.Blazor.Wizard.Examples", "VDT.Core.Blazor.Wizard.Examples\VDT.Core.Blazor.Wizard.Examples.csproj", "{B0FB2D66-8B53-4A6D-B482-76C1F1C392A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{394B2145-FBCE-4DB8-AF57-30876F7CCB22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{394B2145-FBCE-4DB8-AF57-30876F7CCB22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{394B2145-FBCE-4DB8-AF57-30876F7CCB22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0FB2D66-8B53-4A6D-B482-76C1F1C392A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0FB2D66-8B53-4A6D-B482-76C1F1C392A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0FB2D66-8B53-4A6D-B482-76C1F1C392A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0FB2D66-8B53-4A6D-B482-76C1F1C392A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,83 @@
+﻿@page "/CustomLayout"
+
+<h1>Custom layout</h1>
+
+<p>
+    If the default wizard layout does not suffice, it's easy to customize the layout by using the <code>Layout</code> renderfragment in which you can use
+    the <code>context</code> parameter to place all wizard components. <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example
+    wizard.</a>
+</p>
+
+<p>
+    If you provide a layout template the default container elements will not be used and their CSS classes will not be applied. Button CSS classes and text
+    will still be applied as normal. If you choose to place the individual buttons rather than the <code>Buttons</code> fragment, you can opt to leave out
+    the cancel and previous buttons even when they are enabled.
+</p>
+
+<Wizard @ref="Wizard"
+        StepTitleClass="me-3"
+        ActiveStepTitleClass="fw-bold"
+        AllowCancel="true"
+        AllowPrevious="true"
+        ButtonClass="btn"
+        ButtonCancelClass="btn-secondary"
+        ButtonCancelText="Stop"
+        ButtonPreviousClass="btn-secondary"
+        ButtonPreviousText="<< Prev"
+        ButtonFinishClass="btn-primary"
+        ButtonFinishText="Complete"
+        ButtonNextClass="btn-primary"
+        ButtonNextText="Next >>">
+    <TitleContent>
+        <h2>Wizard title</h2>
+    </TitleContent>
+    <Layout>
+        <div class="card">
+            <div class="card-header">
+                @context.Title
+            </div>
+            <div>
+                <div class="d-flex align-items-stretch">
+                    <div class="flex-grow-0 border-end bg-light px-3 py-2">
+                        @context.StepTitles
+                    </div>
+                    <div class="flex-grow-1 px-3 py-2">
+                        @context.Content
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex">
+                <div class="flex-grow-1">
+                    @context.ButtonCancel
+                </div>
+
+                <div class="flex-grow-0 btn-group">
+                    @context.ButtonPrevious
+                    @context.ButtonNext
+                    @context.ButtonFinish
+                </div>
+            </div>
+        </div>
+    </Layout>
+    <Steps>
+        <WizardStep Title="Introduction">
+            <p>
+                This is an example wizard with a custom layout. Please click Next to continue.
+            </p>
+        </WizardStep>
+        <WizardStep Title="Your step here">
+            <p>
+                This is the second step in this wizard. Please click Next to continue.
+            </p>
+        </WizardStep>
+        <WizardStep Title="Summary">
+            <p>
+                Please click Complete to finish the wizard.
+            </p>
+        </WizardStep>
+    </Steps>
+</Wizard>
+
+@code {
+    private Wizard? Wizard { get; set; }
+}
