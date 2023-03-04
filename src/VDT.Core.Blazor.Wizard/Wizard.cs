@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -155,6 +156,8 @@ namespace VDT.Core.Blazor.Wizard {
 
         internal bool IsLastStepActive => ActiveStepIndex.HasValue && ActiveStepIndex.Value == StepsInternal.Count - 1;
 
+        internal Action? StateHasChangedHandler { get; init; }
+
         /// <summary>
         /// Open the wizard at the first step if it's not currently active
         /// </summary>
@@ -165,7 +168,7 @@ namespace VDT.Core.Blazor.Wizard {
 
             ActiveStepIndex = 0;
             await OnStart.InvokeAsync(new WizardStartedEventArgs());
-            StateHasChanged();
+            (StateHasChangedHandler ?? StateHasChanged)();
         }
 
         /// <summary>

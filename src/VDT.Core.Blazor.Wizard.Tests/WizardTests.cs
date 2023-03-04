@@ -67,14 +67,17 @@ namespace VDT.Core.Blazor.Wizard.Tests {
         [Fact]
         public async Task Wizard_Start_Works() {
             WizardStartedEventArgs? arguments = null;
+            bool stateHasChangedInvoked = false;
             var wizard = new Wizard() {
-                OnStart = EventCallback.Factory.Create<WizardStartedEventArgs>(this, args => arguments = args)
+                OnStart = EventCallback.Factory.Create<WizardStartedEventArgs>(this, args => arguments = args),
+                StateHasChangedHandler = () => stateHasChangedInvoked = true
             };
 
             await wizard.Start();
 
             Assert.Equal(0, wizard.ActiveStepIndex);
             Assert.NotNull(arguments);
+            Assert.True(stateHasChangedInvoked);
         }
 
         [Fact]
