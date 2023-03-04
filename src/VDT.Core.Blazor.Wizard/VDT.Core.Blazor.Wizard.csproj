@@ -8,12 +8,11 @@
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.Blazor.Wizard</PackageId>
-		<Version>2.0.1</Version>
+		<Version>2.0.2</Version>
 		<Title>VDT.Core.Blazor.Wizard</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component that helps you create wizard components with sequential steps, forward/back navigation, conditional completion of steps, step- and wizard-level events, and more</Description>
-		<PackageReleaseNotes>- Added example project
-- Added package icon</PackageReleaseNotes>
+		<PackageReleaseNotes>- Fix bug where the full wizard wasn't shown on start</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2022 Maikel Bos</Copyright>
