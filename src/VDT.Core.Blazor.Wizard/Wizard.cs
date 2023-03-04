@@ -165,6 +165,7 @@ namespace VDT.Core.Blazor.Wizard {
 
             ActiveStepIndex = 0;
             await OnStart.InvokeAsync(new WizardStartedEventArgs());
+            StateHasChanged();
         }
 
         /// <summary>
