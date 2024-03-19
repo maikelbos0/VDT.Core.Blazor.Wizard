@@ -1,18 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 	</PropertyGroup>
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.Blazor.Wizard</PackageId>
-		<Version>2.1.0</Version>
+		<Version>3.0.0</Version>
 		<Title>VDT.Core.Blazor.Wizard</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component that helps you create wizard components with sequential steps, forward/back navigation, conditional completion of steps, step- and wizard-level events, and more</Description>
-		<PackageReleaseNotes>- Downgraded dependency Microsoft.AspNetCore.Components.Web to only require the needed major version</PackageReleaseNotes>
+		<PackageReleaseNotes>- Added explicit .net 8.0 support</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2022 Maikel Bos</Copyright>
@@ -41,6 +41,10 @@
 
 	<ItemGroup Condition="$(TargetFramework) == 'net7.0'">
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetFramework) == 'net8.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

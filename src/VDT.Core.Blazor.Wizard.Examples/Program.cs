@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using System.Threading.Tasks;
 
 namespace VDT.Core.Blazor.Wizard.Examples {
     public class Program {
