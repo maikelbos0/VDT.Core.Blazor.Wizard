@@ -28,6 +28,11 @@ jobs:
         repository: maikelbos0/ActionHelpers
         path: 'helpers'
 
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '9.0.x'
+
     - name: Install tools
       run: |
         sudo apt-get install -y xsltproc
