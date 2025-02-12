@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<IsPackable>false</IsPackable>
 		<Nullable>enable</Nullable>
 		<WarningsAsErrors>nullable</WarningsAsErrors>
 	</PropertyGroup>
 
 	<PropertyGroup>
-	  <NoWarn>1701;1702;BL0005</NoWarn>
+		<NoWarn>1701;1702;BL0005</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="coverlet.msbuild" Version="6.0.2">
-		  <PrivateAssets>all</PrivateAssets>
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
 		<PackageReference Include="NSubstitute" Version="5.1.0" />
@@ -28,5 +28,5 @@
 	<ItemGroup>
 		<ProjectReference Include="..\VDT.Core.Blazor.Wizard\VDT.Core.Blazor.Wizard.csproj" />
 	</ItemGroup>
-	
+
 </Project>
