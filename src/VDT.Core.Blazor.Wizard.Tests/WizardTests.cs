@@ -2,245 +2,245 @@
 using System.Threading.Tasks;
 using Xunit;
 
-namespace VDT.Core.Blazor.Wizard.Tests {
-    public class WizardTests {
-        [Theory]
-        [InlineData(null)]
-        [InlineData(2)]
-        public void Wizard_ActiveStep_Returns_Null_Correctly(int? activeStepIndex) {
-            var wizard = new Wizard() {
-                ActiveStepIndex = activeStepIndex
-            };
+namespace VDT.Core.Blazor.Wizard.Tests;
 
-            wizard.StepsInternal.Add(new WizardStep());
-            wizard.StepsInternal.Add(new WizardStep());
+public class WizardTests {
+    [Theory]
+    [InlineData(null)]
+    [InlineData(2)]
+    public void Wizard_ActiveStep_Returns_Null_Correctly(int? activeStepIndex) {
+        var wizard = new Wizard() {
+            ActiveStepIndex = activeStepIndex
+        };
 
-            Assert.Null(wizard.ActiveStep);
-        }
+        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new WizardStep());
 
-        [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        public void Wizard_ActiveStep_Returns_Step_Correctly(int activeStepIndex) {
-            var wizard = new Wizard() {
-                ActiveStepIndex = activeStepIndex
-            };
+        Assert.Null(wizard.ActiveStep);
+    }
 
-            wizard.StepsInternal.Add(new WizardStep());
-            wizard.StepsInternal.Add(new WizardStep());
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    public void Wizard_ActiveStep_Returns_Step_Correctly(int activeStepIndex) {
+        var wizard = new Wizard() {
+            ActiveStepIndex = activeStepIndex
+        };
 
-            Assert.Equal(wizard.StepsInternal[activeStepIndex], wizard.ActiveStep);
-        }
+        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new WizardStep());
 
-        [Theory]
-        [InlineData(null, false)]
-        [InlineData(0, true)]
-        [InlineData(1, false)]
-        [InlineData(2, false)]
-        public void Wizard_IsFirstStepActive_Works(int? activeStepIndex, bool expectedActive) {
-            var wizard = new Wizard() {
-                ActiveStepIndex = activeStepIndex
-            };
+        Assert.Equal(wizard.StepsInternal[activeStepIndex], wizard.ActiveStep);
+    }
 
-            wizard.StepsInternal.Add(new WizardStep());
-            wizard.StepsInternal.Add(new WizardStep());
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData(0, true)]
+    [InlineData(1, false)]
+    [InlineData(2, false)]
+    public void Wizard_IsFirstStepActive_Works(int? activeStepIndex, bool expectedActive) {
+        var wizard = new Wizard() {
+            ActiveStepIndex = activeStepIndex
+        };
 
-            Assert.Equal(expectedActive, wizard.IsFirstStepActive);
-        }
+        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new WizardStep());
 
-        [Theory]
-        [InlineData(null, false)]
-        [InlineData(0, false)]
-        [InlineData(1, true)]
-        [InlineData(2, false)]
-        public void Wizard_IsLastStepActive_Works(int? activeStepIndex, bool expectedActive) {
-            var wizard = new Wizard() {
-                ActiveStepIndex = activeStepIndex
-            };
+        Assert.Equal(expectedActive, wizard.IsFirstStepActive);
+    }
 
-            wizard.StepsInternal.Add(new WizardStep());
-            wizard.StepsInternal.Add(new WizardStep());
+    [Theory]
+    [InlineData(null, false)]
+    [InlineData(0, false)]
+    [InlineData(1, true)]
+    [InlineData(2, false)]
+    public void Wizard_IsLastStepActive_Works(int? activeStepIndex, bool expectedActive) {
+        var wizard = new Wizard() {
+            ActiveStepIndex = activeStepIndex
+        };
 
-            Assert.Equal(expectedActive, wizard.IsLastStepActive);
-        }
+        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new WizardStep());
 
-        [Fact]
-        public async Task Wizard_Start_Works() {
-            WizardStartedEventArgs? arguments = null;
-            bool stateHasChangedInvoked = false;
-            var wizard = new Wizard() {
-                OnStart = EventCallback.Factory.Create<WizardStartedEventArgs>(this, args => arguments = args),
-                StateHasChangedHandler = () => stateHasChangedInvoked = true
-            };
+        Assert.Equal(expectedActive, wizard.IsLastStepActive);
+    }
 
-            await wizard.Start();
+    [Fact]
+    public async Task Wizard_Start_Works() {
+        WizardStartedEventArgs? arguments = null;
+        bool stateHasChangedInvoked = false;
+        var wizard = new Wizard() {
+            OnStart = EventCallback.Factory.Create<WizardStartedEventArgs>(this, args => arguments = args),
+            StateHasChangedHandler = () => stateHasChangedInvoked = true
+        };
 
-            Assert.Equal(0, wizard.ActiveStepIndex);
-            Assert.NotNull(arguments);
-            Assert.True(stateHasChangedInvoked);
-        }
+        await wizard.Start();
 
-        [Fact]
-        public async Task Wizard_Start_Does_Nothing_When_Active() {
-            WizardStartedEventArgs? arguments = null;
-            var wizard = new Wizard() {
-                OnStart = EventCallback.Factory.Create<WizardStartedEventArgs>(this, args => arguments = args),
-                ActiveStepIndex = 2
-            };
+        Assert.Equal(0, wizard.ActiveStepIndex);
+        Assert.NotNull(arguments);
+        Assert.True(stateHasChangedInvoked);
+    }
 
-            await wizard.Start();
+    [Fact]
+    public async Task Wizard_Start_Does_Nothing_When_Active() {
+        WizardStartedEventArgs? arguments = null;
+        var wizard = new Wizard() {
+            OnStart = EventCallback.Factory.Create<WizardStartedEventArgs>(this, args => arguments = args),
+            ActiveStepIndex = 2
+        };
 
-            Assert.Equal(2, wizard.ActiveStepIndex);
-            Assert.Null(arguments);
-        }
+        await wizard.Start();
 
-        [Fact]
-        public async Task Wizard_Stop_Works() {
-            WizardStoppedEventArgs? arguments = null;
-            var wizard = new Wizard() {
-                OnStop = EventCallback.Factory.Create<WizardStoppedEventArgs>(this, args => arguments = args),
-                ActiveStepIndex = 2
-            };
+        Assert.Equal(2, wizard.ActiveStepIndex);
+        Assert.Null(arguments);
+    }
 
-            await wizard.Stop();
+    [Fact]
+    public async Task Wizard_Stop_Works() {
+        WizardStoppedEventArgs? arguments = null;
+        var wizard = new Wizard() {
+            OnStop = EventCallback.Factory.Create<WizardStoppedEventArgs>(this, args => arguments = args),
+            ActiveStepIndex = 2
+        };
 
-            Assert.Null(wizard.ActiveStepIndex);
-            Assert.NotNull(arguments);
-        }
+        await wizard.Stop();
 
-        [Fact]
-        public async Task Wizard_Stop_Does_Nothing_When_Inactive() {
-            WizardStoppedEventArgs? arguments = null;
-            var wizard = new Wizard() {
-                OnStop = EventCallback.Factory.Create<WizardStoppedEventArgs>(this, args => arguments = args)
-            };
+        Assert.Null(wizard.ActiveStepIndex);
+        Assert.NotNull(arguments);
+    }
 
-            await wizard.Stop();
+    [Fact]
+    public async Task Wizard_Stop_Does_Nothing_When_Inactive() {
+        WizardStoppedEventArgs? arguments = null;
+        var wizard = new Wizard() {
+            OnStop = EventCallback.Factory.Create<WizardStoppedEventArgs>(this, args => arguments = args)
+        };
 
-            Assert.Null(arguments);
-        }
+        await wizard.Stop();
 
-        [Fact]
-        public async Task Wizard_AddStep_Works() {
-            var wizard = new Wizard() {
-                ActiveStepIndex = 0
-            };
-            var step = new WizardStep();
+        Assert.Null(arguments);
+    }
 
-            await wizard.AddStep(step);
+    [Fact]
+    public async Task Wizard_AddStep_Works() {
+        var wizard = new Wizard() {
+            ActiveStepIndex = 0
+        };
+        var step = new WizardStep();
 
-            Assert.Equal(step, Assert.Single(wizard.StepsInternal));
-        }
+        await wizard.AddStep(step);
 
-        [Fact]
-        public async Task Wizard_AddStep_Initializes_First_Step() {
-            WizardStepInitializedEventArgs? arguments = null;
-            var wizard = new Wizard() {
-                ActiveStepIndex = 0
-            };
-            var step = new WizardStep() {
-                OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
-            };
+        Assert.Equal(step, Assert.Single(wizard.StepsInternal));
+    }
 
-            await wizard.AddStep(step);
+    [Fact]
+    public async Task Wizard_AddStep_Initializes_First_Step() {
+        WizardStepInitializedEventArgs? arguments = null;
+        var wizard = new Wizard() {
+            ActiveStepIndex = 0
+        };
+        var step = new WizardStep() {
+            OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
+        };
 
-            Assert.NotNull(arguments);
-        }
+        await wizard.AddStep(step);
 
-        [Fact]
-        public async Task Wizard_AddStep_Does_Not_Initialize_Subsequent_Steps() {
-            WizardStepInitializedEventArgs? arguments = null;
-            var wizard = new Wizard() {
-                ActiveStepIndex = 0
-            };
-            var step = new WizardStep() {
-                OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
-            };
+        Assert.NotNull(arguments);
+    }
 
-            await wizard.AddStep(new WizardStep());
-            await wizard.AddStep(step);
+    [Fact]
+    public async Task Wizard_AddStep_Does_Not_Initialize_Subsequent_Steps() {
+        WizardStepInitializedEventArgs? arguments = null;
+        var wizard = new Wizard() {
+            ActiveStepIndex = 0
+        };
+        var step = new WizardStep() {
+            OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
+        };
 
-            Assert.Null(arguments);
-        }
+        await wizard.AddStep(new WizardStep());
+        await wizard.AddStep(step);
 
-        [Fact]
-        public async Task Wizard_AddStep_Does_Nothing_For_Existing_Step() {
-            var wizard = new Wizard() {
-                ActiveStepIndex = 0
-            };
-            var step = new WizardStep();
+        Assert.Null(arguments);
+    }
 
-            await wizard.AddStep(step);
-            await wizard.AddStep(step);
+    [Fact]
+    public async Task Wizard_AddStep_Does_Nothing_For_Existing_Step() {
+        var wizard = new Wizard() {
+            ActiveStepIndex = 0
+        };
+        var step = new WizardStep();
 
-            Assert.Equal(step, Assert.Single(wizard.StepsInternal));
-        }
+        await wizard.AddStep(step);
+        await wizard.AddStep(step);
 
-        [Fact]
-        public async Task Wizard_GoToPreviousStep_Works() {
-            WizardStepInitializedEventArgs? arguments = null;
-            var wizard = new Wizard() {
-                ActiveStepIndex = 1
-            };
-            var step = new WizardStep() {
-                OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
-            };
+        Assert.Equal(step, Assert.Single(wizard.StepsInternal));
+    }
 
-            wizard.StepsInternal.Add(step);
+    [Fact]
+    public async Task Wizard_GoToPreviousStep_Works() {
+        WizardStepInitializedEventArgs? arguments = null;
+        var wizard = new Wizard() {
+            ActiveStepIndex = 1
+        };
+        var step = new WizardStep() {
+            OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
+        };
 
-            await wizard.GoToPreviousStep();
+        wizard.StepsInternal.Add(step);
 
-            Assert.Equal(0, wizard.ActiveStepIndex);
-            Assert.NotNull(arguments);
-        }
+        await wizard.GoToPreviousStep();
 
-        [Fact]
-        public async Task Wizard_TryCompleteStep_Can_Be_Cancelled() {
-            var wizard = new Wizard() {
-                ActiveStepIndex = 0
-            };
-            var step = new WizardStep() {
-                OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => args.IsCancelled = true)
-            };
+        Assert.Equal(0, wizard.ActiveStepIndex);
+        Assert.NotNull(arguments);
+    }
 
-            wizard.StepsInternal.Add(step);
+    [Fact]
+    public async Task Wizard_TryCompleteStep_Can_Be_Cancelled() {
+        var wizard = new Wizard() {
+            ActiveStepIndex = 0
+        };
+        var step = new WizardStep() {
+            OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => args.IsCancelled = true)
+        };
 
-            await wizard.TryCompleteStep();
+        wizard.StepsInternal.Add(step);
 
-            Assert.Equal(0, wizard.ActiveStepIndex);
-        }
+        await wizard.TryCompleteStep();
 
-        [Fact]
-        public async Task Wizard_TryCompleteStep_Initializes_Next_Step() {
-            WizardStepInitializedEventArgs? arguments = null;
-            var wizard = new Wizard() {
-                ActiveStepIndex = 0
-            };
-            var step = new WizardStep() {
-                OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
-            };
+        Assert.Equal(0, wizard.ActiveStepIndex);
+    }
 
-            wizard.StepsInternal.Add(new WizardStep());
-            wizard.StepsInternal.Add(step);
+    [Fact]
+    public async Task Wizard_TryCompleteStep_Initializes_Next_Step() {
+        WizardStepInitializedEventArgs? arguments = null;
+        var wizard = new Wizard() {
+            ActiveStepIndex = 0
+        };
+        var step = new WizardStep() {
+            OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
+        };
 
-            await wizard.TryCompleteStep();
+        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(step);
 
-            Assert.Equal(1, wizard.ActiveStepIndex);
-            Assert.NotNull(arguments);
-        }
+        await wizard.TryCompleteStep();
 
-        [Fact]
-        public async Task Wizard_TryCompleteStep_Resets_When_Finished() {
-            var wizard = new Wizard() {
-                ActiveStepIndex = 0
-            };
+        Assert.Equal(1, wizard.ActiveStepIndex);
+        Assert.NotNull(arguments);
+    }
 
-            wizard.StepsInternal.Add(new WizardStep());
+    [Fact]
+    public async Task Wizard_TryCompleteStep_Resets_When_Finished() {
+        var wizard = new Wizard() {
+            ActiveStepIndex = 0
+        };
 
-            await wizard.TryCompleteStep();
+        wizard.StepsInternal.Add(new WizardStep());
 
-            Assert.Null(wizard.ActiveStepIndex);
-            Assert.Empty(wizard.StepsInternal);
-        }
+        await wizard.TryCompleteStep();
+
+        Assert.Null(wizard.ActiveStepIndex);
+        Assert.Empty(wizard.StepsInternal);
     }
 }
