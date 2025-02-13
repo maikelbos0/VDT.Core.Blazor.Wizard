@@ -236,7 +236,7 @@ public class WizardTests {
         wizard.StepsInternal.Add(new WizardStep());
         wizard.StepsInternal.Add(step);
 
-        await wizard.TryCompleteStep();
+        Assert.True(await wizard.TryCompleteStep());
 
         Assert.Equal(1, wizard.ActiveStepIndex);
         Assert.NotNull(arguments);
@@ -253,7 +253,7 @@ public class WizardTests {
 
         wizard.StepsInternal.Add(step);
 
-        await wizard.TryCompleteStep();
+        Assert.False(await wizard.TryCompleteStep());
 
         Assert.Equal(0, wizard.ActiveStepIndex);
     }
@@ -266,9 +266,22 @@ public class WizardTests {
 
         wizard.StepsInternal.Add(new WizardStep());
 
-        await wizard.TryCompleteStep();
+        Assert.True(await wizard.TryCompleteStep());
 
         Assert.Null(wizard.ActiveStepIndex);
         Assert.Empty(wizard.StepsInternal);
+    }
+
+    [Fact]
+    public async Task TryCompleteStep_Does_Nothing_When_Inactive() {
+        WizardStepAttemptedCompleteEventArgs? arguments = null;
+        var wizard = new Wizard();
+
+        wizard.StepsInternal.Add(new WizardStep());
+
+        Assert.False(await wizard.TryCompleteStep());
+
+        Assert.Null(wizard.ActiveStepIndex);
+        Assert.Null(arguments);
     }
 }

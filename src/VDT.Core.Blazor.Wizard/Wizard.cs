@@ -210,8 +210,12 @@ public class Wizard : ComponentBase {
         }
     }
 
-    internal async Task TryCompleteStep() {
-        if (await ActiveStep!.TryComplete()) {
+    /// <summary>
+    /// Attempt to complete the current step, then either move to the next step or complete the wizard
+    /// </summary>
+    /// <returns><see langword="true"/> if successful, otherwise <see langword="false"/></returns>
+    public async Task<bool> TryCompleteStep() {
+        if (IsActive && await ActiveStep!.TryComplete()) {
             ActiveStepIndex++;
 
             if (ActiveStep == null) {
@@ -221,6 +225,11 @@ public class Wizard : ComponentBase {
             else {
                 await ActiveStep!.Initialize();
             }
+
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
