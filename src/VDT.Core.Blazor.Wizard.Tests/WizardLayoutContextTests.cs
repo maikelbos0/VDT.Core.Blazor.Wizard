@@ -68,7 +68,7 @@ public class WizardLayoutContextTests {
 #pragma warning restore BL0006 // Do not use RenderTree types
 
     [Fact]
-    public void WizardLayoutContext_Wizard_Renders_When_Active() {
+    public void Wizard_Renders_When_Active() {
         var wizard = new Wizard() {
             ActiveStepIndex = 0
         };
@@ -81,7 +81,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_Wizard_Does_Not_Render_When_Active() {
+    public void Wizard_Does_Not_Render_When_Active() {
         var wizard = new Wizard();
         var context = TestContext.CreateTestContext(wizard, c => c.Wizard);
 
@@ -89,7 +89,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_WizardContent_Renders_DefaultLayout_Correctly() {
+    public void WizardContent_Renders_DefaultLayout_Correctly() {
         var wizard = new Wizard() {
             Steps = builder => builder.AddContent(1, "Step")
         };
@@ -100,7 +100,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_WizardContent_Renders_Layout_Correctly() {
+    public void WizardContent_Renders_Layout_Correctly() {
         var wizard = new Wizard() {
             Steps = builder => builder.AddContent(1, "Step"),
             Layout = context => builder => builder.AddContent(1, "Test")
@@ -113,7 +113,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_DefaultLayout_Renders_Correctly() {
+    public void DefaultLayout_Renders_Correctly() {
         var wizard = new Wizard() {
             ActiveStepIndex = 0,
             ContainerClass = "container",
@@ -151,7 +151,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_Title_Renders_Correctly() {
+    public void Title_Renders_Correctly() {
         var wizard = new Wizard() {
             TitleContent = builder => builder.AddContent(1, "<h1>Title</h1>")
         };
@@ -162,7 +162,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_StepTitles_Renders_Correctly() {
+    public void StepTitles_Renders_Correctly() {
         var wizard = new Wizard() {
             ActiveStepIndex = 1,
             StepTitleClass = "step-title",
@@ -188,7 +188,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_Buttons_Renders_Correctly() {
+    public void Buttons_Renders_Correctly() {
         var wizard = new Wizard() {
             ActiveStepIndex = 1,
             AllowCancel = true,
@@ -218,7 +218,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_ButtonCancel_Renders_When_Allowed() {
+    public void ButtonCancel_Renders_When_Allowed() {
         var wizard = new Wizard() {
             AllowCancel = true,
             ButtonCancelText = "Abort",
@@ -236,7 +236,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_ButtonCancel_Does_Not_Render_When_Not_Allowed() {
+    public void ButtonCancel_Does_Not_Render_When_Not_Allowed() {
         var wizard = new Wizard();
         var context = TestContext.CreateTestContext(wizard, c => c.ButtonCancel);
 
@@ -244,7 +244,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_ButtonPrevious_Renders_When_Allowed() {
+    public void ButtonPrevious_Renders_When_Allowed() {
         var wizard = new Wizard() {
             AllowPrevious = true,
             ButtonPreviousText = "Prev",
@@ -262,7 +262,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_ButtonPrevious_Does_Not_Render_When_Not_Allowed() {
+    public void ButtonPrevious_Does_Not_Render_When_Not_Allowed() {
         var wizard = new Wizard();
         var context = TestContext.CreateTestContext(wizard, c => c.ButtonPrevious);
 
@@ -270,7 +270,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_ButtonPrevious_Does_Not_Render_When_On_First_Step() {
+    public void ButtonPrevious_Does_Not_Render_When_On_First_Step() {
         var wizard = new Wizard() {
             ActiveStepIndex = 0,
             AllowPrevious = true
@@ -284,7 +284,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_ButtonNext_Renders_When_Not_On_Last_Step() {
+    public void ButtonNext_Renders_When_Not_On_Last_Step() {
         var wizard = new Wizard() {
             ActiveStepIndex = 0,
             ButtonNextText = "Continue",
@@ -308,7 +308,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_ButtonNext_Does_Not_Render_When_On_Last_Step() {
+    public void ButtonNext_Does_Not_Render_When_On_Last_Step() {
         var wizard = new Wizard() {
             ActiveStepIndex = 0
         };
@@ -321,7 +321,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_ButtonFinish_Renders_When_On_Last_Step() {
+    public void ButtonFinish_Renders_When_On_Last_Step() {
         var wizard = new Wizard() {
             ActiveStepIndex = 1,
             ButtonFinishText = "Complete",
@@ -345,7 +345,7 @@ public class WizardLayoutContextTests {
     }
 
     [Fact]
-    public void WizardLayoutContext_ButtonFinish_Does_Not_Render_When_Not_On_Last_Step() {
+    public void ButtonFinish_Does_Not_Render_When_Not_On_Last_Step() {
         var wizard = new Wizard() {
             ActiveStepIndex = 0
         };
