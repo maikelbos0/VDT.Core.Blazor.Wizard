@@ -135,7 +135,7 @@ control over which elements you want to render and which markup to use around th
 - `ButtonPrevious` renders the previous button only if enabled and a previous step is available
 - `ButtonNext` renders the next button if a next step is available
 - `ButtonFinish` renders the finish button if no next step is available
-- `Content` renders the content of the currently active step
+- `ActiveStepContent` renders the content of the currently active step
 
 ### Example
 
@@ -153,7 +153,7 @@ control over which elements you want to render and which markup to use around th
             </div>
 
             <div class="wizard-body">
-                @context.Content
+                @context.ActiveStepContent
             </div>
 
             <div class="wizard-buttons">

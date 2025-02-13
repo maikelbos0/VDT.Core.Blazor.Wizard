@@ -6,29 +6,32 @@ namespace VDT.Core.Blazor.Wizard;
 /// Context for render fragments for a wizard layout template
 /// </summary>
 public class WizardLayoutContext {
-    private readonly Wizard wizard;
+    /// <summary>
+    /// Wizard that owns this context
+    /// </summary>
+    public Wizard Wizard { get; }
 
     internal WizardLayoutContext(Wizard wizard) {
-        this.wizard = wizard;
+        this.Wizard = wizard;
     }
 
-    internal RenderFragment Wizard => builder => {
-        if (wizard.IsActive) {
+    internal RenderFragment CascadingValue => builder => {
+        if (Wizard.IsActive) {
             builder.OpenComponent<CascadingValue<Wizard>>(1);
-            builder.AddAttribute(2, "Value", wizard);
-            builder.AddAttribute(3, "ChildContent", WizardContent);
+            builder.AddAttribute(2, "Value", Wizard);
+            builder.AddAttribute(3, "ChildContent", Content);
             builder.CloseComponent();
         }
     };
 
-    internal RenderFragment WizardContent => builder => {
-        builder.AddContent(1, wizard.Steps);
+    internal RenderFragment Content => builder => {
+        builder.AddContent(1, Wizard.Steps);
 
-        if (wizard.Layout == null) {
+        if (Wizard.Layout == null) {
             builder.AddContent(2, DefaultLayout);
         }
         else {
-            builder.AddContent(2, wizard.Layout(this));
+            builder.AddContent(2, Wizard.Layout(this));
         }
     };
 
@@ -37,27 +40,27 @@ public class WizardLayoutContext {
     /// </summary>
     public RenderFragment DefaultLayout => builder => {
         builder.OpenElement(1, "div");
-        builder.AddAttribute(2, "class", wizard.ContainerClass);
+        builder.AddAttribute(2, "class", Wizard.ContainerClass);
 
         {
             builder.OpenElement(3, "div");
-            builder.AddAttribute(4, "class", wizard.TitleContainerClass);
+            builder.AddAttribute(4, "class", Wizard.TitleContainerClass);
             builder.AddContent(5, Title);
             builder.CloseElement();
 
             builder.OpenElement(7, "div");
-            builder.AddAttribute(8, "class", wizard.StepTitleContainerClass);
+            builder.AddAttribute(8, "class", Wizard.StepTitleContainerClass);
             builder.AddContent(9, StepTitles);
             builder.CloseElement();
 
             builder.OpenElement(11, "div");
-            builder.AddAttribute(12, "class", wizard.ButtonContainerClass);
+            builder.AddAttribute(12, "class", Wizard.ButtonContainerClass);
             builder.AddContent(13, Buttons);
             builder.CloseElement();
 
             builder.OpenElement(15, "div");
-            builder.AddAttribute(16, "class", wizard.ContentContainerClass);
-            builder.AddContent(17, Content);
+            builder.AddAttribute(16, "class", Wizard.ContentContainerClass);
+            builder.AddContent(17, ActiveStepContent);
             builder.CloseElement();
         }
 
@@ -68,22 +71,22 @@ public class WizardLayoutContext {
     /// Renders the wizard title content
     /// </summary>
     public RenderFragment Title => builder => {
-        builder.AddContent(1, wizard.TitleContent);
+        builder.AddContent(1, Wizard.TitleContent);
     };
 
     /// <summary>
     /// Renders the wizard step titles
     /// </summary>
     public RenderFragment StepTitles => builder => {
-        foreach (var step in wizard.StepsInternal) {
+        foreach (var step in Wizard.StepsInternal) {
             builder.OpenElement(1, "div");
             builder.SetKey(step);
 
-            if (step == wizard.ActiveStep) {
-                builder.AddAttribute(2, "class", $"{wizard.StepTitleClass} {wizard.ActiveStepTitleClass}");
+            if (step == Wizard.ActiveStep) {
+                builder.AddAttribute(2, "class", $"{Wizard.StepTitleClass} {Wizard.ActiveStepTitleClass}");
             }
             else {
-                builder.AddAttribute(2, "class", $"{wizard.StepTitleClass}");
+                builder.AddAttribute(2, "class", $"{Wizard.StepTitleClass}");
             }
 
             builder.AddContent(3, step.Title);
@@ -105,12 +108,12 @@ public class WizardLayoutContext {
     /// Renders the wizard cancel button
     /// </summary>
     public RenderFragment ButtonCancel => builder => {
-        if (!wizard.AllowCancel) return;
+        if (!Wizard.AllowCancel) return;
 
         builder.OpenElement(1, "button");
-        builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(wizard, wizard.Stop));
-        builder.AddAttribute(3, "class", $"{wizard.ButtonClass} {wizard.ButtonCancelClass}");
-        builder.AddContent(4, wizard.ButtonCancelText);
+        builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(Wizard, Wizard.Stop));
+        builder.AddAttribute(3, "class", $"{Wizard.ButtonClass} {Wizard.ButtonCancelClass}");
+        builder.AddContent(4, Wizard.ButtonCancelText);
         builder.CloseElement();
     };
 
@@ -118,12 +121,12 @@ public class WizardLayoutContext {
     /// Renders the wizard previous button
     /// </summary>
     public RenderFragment ButtonPrevious => builder => {
-        if (!wizard.AllowPrevious || wizard.IsFirstStepActive) return;
+        if (!Wizard.AllowPrevious || Wizard.IsFirstStepActive) return;
 
         builder.OpenElement(1, "button");
-        builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(wizard, wizard.GoToPreviousStep));
-        builder.AddAttribute(3, "class", $"{wizard.ButtonClass} {wizard.ButtonPreviousClass}");
-        builder.AddContent(4, wizard.ButtonPreviousText);
+        builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(Wizard, Wizard.GoToPreviousStep));
+        builder.AddAttribute(3, "class", $"{Wizard.ButtonClass} {Wizard.ButtonPreviousClass}");
+        builder.AddContent(4, Wizard.ButtonPreviousText);
         builder.CloseElement();
     };
 
@@ -131,12 +134,12 @@ public class WizardLayoutContext {
     /// Renders the wizard next button
     /// </summary>
     public RenderFragment ButtonNext => builder => {
-        if (wizard.IsLastStepActive) return;
+        if (Wizard.IsLastStepActive) return;
 
         builder.OpenElement(1, "button");
-        builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(wizard, wizard.TryCompleteStep));
-        builder.AddAttribute(3, "class", $"{wizard.ButtonClass} {wizard.ButtonNextClass}");
-        builder.AddContent(4, wizard.ButtonNextText);
+        builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(Wizard, Wizard.TryCompleteStep));
+        builder.AddAttribute(3, "class", $"{Wizard.ButtonClass} {Wizard.ButtonNextClass}");
+        builder.AddContent(4, Wizard.ButtonNextText);
         builder.CloseElement();
     };
 
@@ -144,21 +147,21 @@ public class WizardLayoutContext {
     /// Renders the wizard finish button
     /// </summary>
     public RenderFragment ButtonFinish => builder => {
-        if (!wizard.IsLastStepActive) return;
+        if (!Wizard.IsLastStepActive) return;
 
         builder.OpenElement(1, "button");
-        builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(wizard, wizard.TryCompleteStep));
-        builder.AddAttribute(3, "class", $"{wizard.ButtonClass} {wizard.ButtonFinishClass}");
-        builder.AddContent(4, wizard.ButtonFinishText);
+        builder.AddAttribute(2, "onclick", EventCallback.Factory.Create(Wizard, Wizard.TryCompleteStep));
+        builder.AddAttribute(3, "class", $"{Wizard.ButtonClass} {Wizard.ButtonFinishClass}");
+        builder.AddContent(4, Wizard.ButtonFinishText);
         builder.CloseElement();
     };
 
     /// <summary>
     /// Renders the wizard active step content
     /// </summary>
-    public RenderFragment Content => builder => {
-        if (wizard.ActiveStep != null) {
-            builder.AddContent(1, wizard.ActiveStep.ChildContent);
+    public RenderFragment ActiveStepContent => builder => {
+        if (Wizard.ActiveStep != null) {
+            builder.AddContent(1, Wizard.ActiveStep.ChildContent);
         }
     };
 }

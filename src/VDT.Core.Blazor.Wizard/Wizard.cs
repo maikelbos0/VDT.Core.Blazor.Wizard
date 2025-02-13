@@ -239,5 +239,5 @@ public class Wizard : ComponentBase {
     }
 
     /// <inheritdoc/>
-    protected override void BuildRenderTree(RenderTreeBuilder builder) => LayoutContext.Wizard(builder);
+    protected override void BuildRenderTree(RenderTreeBuilder builder) => LayoutContext.CascadingValue(builder);
 }
