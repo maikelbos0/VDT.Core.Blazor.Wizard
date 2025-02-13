@@ -36,9 +36,7 @@ public class WizardStep : ComponentBase {
     public bool IsActive => Wizard?.ActiveStep == this;
 
     /// <inheritdoc/>
-    protected override void OnInitialized() {
-        Wizard?.AddStep(this);
-    }
+    protected override void OnInitialized() => Wizard?.AddStep(this);
 
     internal async Task Initialize() {
         var args = new WizardStepInitializedEventArgs();

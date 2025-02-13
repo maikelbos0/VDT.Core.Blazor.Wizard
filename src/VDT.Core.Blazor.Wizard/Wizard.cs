@@ -194,9 +194,20 @@ public class Wizard : ComponentBase {
         }
     }
 
-    internal async Task GoToPreviousStep() {
-        ActiveStepIndex--;
-        await ActiveStep!.Initialize();
+    /// <summary>
+    /// Go to the previous step in this wizard if it is active and it's not on the first step
+    /// </summary>
+    /// <returns><see langword="true"/> if successful, otherwise <see langword="false"/></returns>
+    public async Task<bool> GoToPreviousStep() {
+        if (IsActive && !IsFirstStepActive) {
+            ActiveStepIndex--;
+            await ActiveStep!.Initialize();
+
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     internal async Task TryCompleteStep() {
