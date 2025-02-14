@@ -43,43 +43,35 @@ public class WizardStepTests {
         Assert.NotNull(arguments);
     }
 
-    [Fact]
-    public async Task TryComplete_Invokes_OnTryComplete() {
+    [Theory]
+    [InlineData(true, true)]
+    [InlineData(false, false)]
+    public async Task TryComplete_Invokes_OnTryComplete(bool isCompleted, bool expectedWasPreviouslyCompleted) {
         WizardStepAttemptedCompleteEventArgs? arguments = null;
         var step = new WizardStep() {
-            OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => arguments = args)
+            OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => arguments = args),
+            IsCompleted = isCompleted
         };
 
         await step.TryComplete();
 
         Assert.NotNull(arguments);
-        Assert.True(step.IsCompleted);
-    }
-
-    [Fact]
-    public async Task TryComplete_Invokes_OnTryComplete_Only_Once() {
-        WizardStepAttemptedCompleteEventArgs? arguments = null;
-        var step = new WizardStep();
-
-        await step.TryComplete();
-
-        step.OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => arguments = args);
-
-        await step.TryComplete();
-
-        Assert.Null(arguments);
+        Assert.Equal(expectedWasPreviouslyCompleted, arguments.WasPreviouslyCompleted);
         Assert.True(step.IsCompleted);
     }
 
     [Theory]
-    [InlineData(true, false)]
-    [InlineData(false, true)]
-    public async Task TryComplete_Returns_Correct_ShouldComplete(bool isCancelled, bool expectedResult) {
+    [InlineData(false, true, false, false)]
+    [InlineData(false, false, true, true)]
+    [InlineData(true, true, false, true)]
+    [InlineData(true, false, true, true)]
+    public async Task TryComplete_Returns_Correct_ShouldComplete(bool isCompleted, bool isCancelled, bool expectedShouldComplete, bool expectedIsCompleted) {
         var step = new WizardStep() {
-            OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => args.IsCancelled = isCancelled)
+            OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => args.IsCancelled = isCancelled),
+            IsCompleted = isCompleted
         };
 
-        Assert.Equal(expectedResult, await step.TryComplete());
-        Assert.Equal(expectedResult, step.IsCompleted);
+        Assert.Equal(expectedShouldComplete, await step.TryComplete());
+        Assert.Equal(expectedIsCompleted, step.IsCompleted);
     }
 }

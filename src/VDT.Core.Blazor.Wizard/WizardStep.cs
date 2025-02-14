@@ -38,7 +38,7 @@ public class WizardStep : ComponentBase {
     /// <summary>
     /// Indicates whether or not this step has been previously completed; resets to <see langword="false"/> when the wizard is closed
     /// </summary>
-    public bool IsCompleted { get; private set; }
+    public bool IsCompleted { get; internal set; }
 
     /// <inheritdoc/>
     protected override void OnInitialized() => Wizard?.AddStep(this);
@@ -50,14 +50,12 @@ public class WizardStep : ComponentBase {
     }
 
     internal async Task<bool> TryComplete() {
-        if (!IsCompleted) {
-            var args = new WizardStepAttemptedCompleteEventArgs();
+        var args = new WizardStepAttemptedCompleteEventArgs() { WasPreviouslyCompleted = IsCompleted };
 
-            await OnTryComplete.InvokeAsync(args);
+        await OnTryComplete.InvokeAsync(args);
 
-            IsCompleted = !args.IsCancelled;
-        }
+        IsCompleted |= !args.IsCancelled;
 
-        return IsCompleted;
+        return !args.IsCancelled;
     }
 }
