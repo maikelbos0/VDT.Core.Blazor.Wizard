@@ -53,6 +53,22 @@ public class WizardStepTests {
         await step.TryComplete();
 
         Assert.NotNull(arguments);
+        Assert.True(step.IsCompleted);
+    }
+
+    [Fact]
+    public async Task TryComplete_Invokes_OnTryComplete_Only_Once() {
+        WizardStepAttemptedCompleteEventArgs? arguments = null;
+        var step = new WizardStep();
+
+        await step.TryComplete();
+
+        step.OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => arguments = args);
+
+        await step.TryComplete();
+
+        Assert.Null(arguments);
+        Assert.True(step.IsCompleted);
     }
 
     [Theory]
@@ -64,5 +80,6 @@ public class WizardStepTests {
         };
 
         Assert.Equal(expectedResult, await step.TryComplete());
+        Assert.Equal(expectedResult, step.IsCompleted);
     }
 }
