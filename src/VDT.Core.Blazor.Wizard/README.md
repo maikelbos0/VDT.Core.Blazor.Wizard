@@ -121,31 +121,31 @@ The wizard can be provided with the following CSS classes:
 
 Aside from the Blazor properties shown in the above example, the wizard provides the following readonly properties to access state information:
 
-- `IsActive` - Indicates whether or not the wizard is currently active
-- `ActiveStepIndex` - Index of the currently active step if the wizard is active; otherwise `null`
-- `ActiveStep` - Currently active step if the wizard is active; otherwise `null`
-- `IsFirstStepActive` - Indicates if the first step in the wizard is the currently active one
-- `IsLastStepActive` - Indicates if the last step in the wizard is the currently active one
-- `AllSteps` - All available wizard steps in order of display
+- `IsActive` indicates whether or not the wizard is currently active
+- `ActiveStepIndex` is the index of the currently active step if the wizard is active; otherwise `null`
+- `ActiveStep` is the currently active step if the wizard is active; otherwise `null`
+- `IsFirstStepActive` indicates if the first step in the wizard is the currently active one
+- `IsLastStepActive` indicates if the last step in the wizard is the currently active one
+- `AllSteps` returns all available wizard steps in order of display
 
 The wizard provides the following methods to manipulate its state. These methods can also be accessed from the layout context using `context.Wizard`.
 
-- `Start()` - Open the wizard at the first step if it's not currently active
-- `Stop()` - Close and reset the wizard if it's currently active
-- `GoToPreviousStep()` - Go to the previous step in this wizard if it is active and it's not on the first step
-- `TryCompleteStep()` - Attempt to complete the current step, then either move to the next step or complete the wizard
-- `GoToStep(int stepIndex, bool tryCompleteStep)` - Navigate to a specific step in the wizard if it is active, after optionally attempting to complete the
+- `Start()` opens the wizard at the first step if it's not currently active
+- `Stop()` closes and reset the wizard if it's currently active
+- `GoToPreviousStep()` goes to the previous step in this wizard if it is active and it's not on the first step
+- `TryCompleteStep()` attempts to complete the current step, then either move to the next step or complete the wizard
+- `GoToStep(int stepIndex, bool tryCompleteStep)` navigates to a specific step in the wizard if it is active, after optionally attempting to complete the
   currently active step
   -  Navigating to the step after the last available step completes and resets the wizard
-- `GoToStep(StepIndexProvider stepIndexProvider, bool tryCompleteStep)` - Navigate to a specific step based on the currently active step in the wizard if it is
+- `GoToStep(StepIndexProvider stepIndexProvider, bool tryCompleteStep)` navigates to a specific step based on the currently active step in the wizard if it is
   active, after optionally attempting to complete the currently active step
   - This is convenient for navigating to a step relative to the current step
 
 Aside from the Blazor properties shown in the above example, the currently active wizard step provides the following readonly properties to access state
 information:
 
-- `IsActive` - Indicates whether or not the wizard step is currently active
-- `IsCompleted` - Indicates whether or not this step has been previously completed; resets to `false` when the wizard is closed
+- `IsActive` indicates whether or not the wizard step is currently active
+- `IsCompleted` indicates whether or not this step has been previously completed; resets to `false` when the wizard is closed
 
 ## Layout
 
