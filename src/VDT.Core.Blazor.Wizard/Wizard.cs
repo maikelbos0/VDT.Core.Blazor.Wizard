@@ -198,23 +198,37 @@ public class Wizard : ComponentBase {
     /// Go to the previous step in this wizard if it is active and it's not on the first step
     /// </summary>
     /// <returns><see langword="true"/> if successful, otherwise <see langword="false"/></returns>
-    public Task<bool> GoToPreviousStep() => GoToStep(ActiveStepIndex - 1, false);
+    public Task<bool> GoToPreviousStep() => GoToStep(activeStepIndex => activeStepIndex - 1, false);
 
     /// <summary>
     /// Attempt to complete the current step, then either move to the next step or complete the wizard
     /// </summary>
     /// <returns><see langword="true"/> if successful, otherwise <see langword="false"/></returns>
-    public Task<bool> TryCompleteStep() => GoToStep(ActiveStepIndex + 1, true);
+    public Task<bool> TryCompleteStep() => GoToStep(activeStepIndex => activeStepIndex + 1, true);
 
     /// <summary>
-    /// Navigate to a specific step in the wizard if it is active
+    /// Navigate to a specific step in the wizard if it is active, after optionally attempting to complete the currently active step
     /// </summary>
     /// <param name="stepIndex">Index of the step to navigate to</param>
     /// <param name="tryCompleteStep">If <see langword="true"/>, only go to the provided step if the current step can be completed</param>
     /// <returns><see langword="true"/> if successful, otherwise <see langword="false"/></returns>
-    public async Task<bool> GoToStep(int? stepIndex, bool tryCompleteStep) {
+    public Task<bool> GoToStep(int stepIndex, bool tryCompleteStep) => GoToStep(_ => stepIndex, tryCompleteStep);
+
+    /// <summary>
+    /// Navigate to a specific step in the wizard if it is active, after optionally attempting to complete the currently active step
+    /// </summary>
+    /// <param name="stepIndexProvider">Method to determine the step to navigate to</param>
+    /// <param name="tryCompleteStep">If <see langword="true"/>, only go to the provided step if the current step can be completed</param>
+    /// <returns><see langword="true"/> if successful, otherwise <see langword="false"/></returns>
+    public async Task<bool> GoToStep(StepIndexProvider stepIndexProvider, bool tryCompleteStep) {
+        if (!IsActive) {
+            return false;
+        }
+
+        var stepIndex = stepIndexProvider(ActiveStepIndex!.Value);
+
         // We allow navigating to the "step" after the final one to complete the wizard
-        if (!IsActive || stepIndex == null || stepIndex < 0 || stepIndex > StepsInternal.Count) {
+        if (!IsActive || stepIndex < 0 || stepIndex > StepsInternal.Count) {
             return false;
         }
 

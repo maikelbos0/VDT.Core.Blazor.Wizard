@@ -364,10 +364,9 @@ public class WizardTests {
     }
 
     [Theory]
-    [InlineData(null)]
     [InlineData(-1)]
     [InlineData(3)]
-    public async Task GoToStep_Does_Nothing_When_StepIndex_Out_Of_Bounds(int? stepIndex) {
+    public async Task GoToStep_Does_Nothing_When_StepIndex_Out_Of_Bounds(int stepIndex) {
         WizardStepInitializedEventArgs? wizardStepInitializedEventArgs = null;
         WizardStepAttemptedCompleteEventArgs? wizardStepAttemptedCompleteEventArgs = null;
         var wizard = new Wizard() {
