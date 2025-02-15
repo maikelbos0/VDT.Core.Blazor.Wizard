@@ -95,7 +95,7 @@ public class WizardLayoutContext {
     };
 
     /// <summary>
-    /// Renders the wizard cancel, previous, next and finish buttons
+    /// Renders the wizard cancel, previous, next and finish buttons if they are available and enabled
     /// </summary>
     public RenderFragment Buttons => builder => {
         builder.AddContent(1, ButtonCancel);
@@ -105,7 +105,7 @@ public class WizardLayoutContext {
     };
 
     /// <summary>
-    /// Renders the wizard cancel button
+    /// Renders the wizard cancel button if enabled
     /// </summary>
     public RenderFragment ButtonCancel => builder => {
         if (!Wizard.AllowCancel) return;
@@ -118,7 +118,7 @@ public class WizardLayoutContext {
     };
 
     /// <summary>
-    /// Renders the wizard previous button
+    /// Renders the wizard previous button if enabled and there is a previous step
     /// </summary>
     public RenderFragment ButtonPrevious => builder => {
         if (!Wizard.AllowPrevious || Wizard.IsFirstStepActive) return;
@@ -131,7 +131,7 @@ public class WizardLayoutContext {
     };
 
     /// <summary>
-    /// Renders the wizard next button
+    /// Renders the wizard next button if there is a next step
     /// </summary>
     public RenderFragment ButtonNext => builder => {
         if (Wizard.IsLastStepActive) return;
@@ -144,7 +144,7 @@ public class WizardLayoutContext {
     };
 
     /// <summary>
-    /// Renders the wizard finish button
+    /// Renders the wizard finish button if this is the final step
     /// </summary>
     public RenderFragment ButtonFinish => builder => {
         if (!Wizard.IsLastStepActive) return;
