@@ -123,11 +123,6 @@ public class Wizard : ComponentBase {
     [Parameter] public RenderFragment<WizardLayoutContext>? Layout { get; set; }
 
     /// <summary>
-    /// Indicates whether or not the wizard is currently active
-    /// </summary>
-    public bool IsActive => ActiveStepIndex.HasValue;
-
-    /// <summary>
     /// A callback that will be invoked when the wizard is started
     /// </summary>
     [Parameter]
@@ -145,17 +140,34 @@ public class Wizard : ComponentBase {
     [Parameter]
     public EventCallback<WizardFinishedEventArgs> OnFinish { get; set; }
 
+    /// <summary>
+    /// Indicates whether or not the wizard is currently active
+    /// </summary>
+    public bool IsActive => ActiveStepIndex.HasValue;
+
+    /// <summary>
+    /// Index of the currently active step if the wizard is active; otherwise <see langword="null"/>
+    /// </summary>
+    public int? ActiveStepIndex { get; internal set; }
+
+    /// <summary>
+    /// Currently active step if the wizard is active; otherwise <see langword="null"/>
+    /// </summary>
+    public WizardStep? ActiveStep => ActiveStepIndex.HasValue && StepsInternal.Count > ActiveStepIndex.Value ? StepsInternal[ActiveStepIndex.Value] : null;
+
+    /// <summary>
+    /// Indicates if the first step in the wizard is the currently active one
+    /// </summary>
+    public bool IsFirstStepActive => ActiveStepIndex.HasValue && ActiveStepIndex.Value == 0;
+
+    /// <summary>
+    /// Indicates if the last step in the wizard is the currently active one
+    /// </summary>
+    public bool IsLastStepActive => ActiveStepIndex.HasValue && ActiveStepIndex.Value == StepsInternal.Count - 1;
+
     internal List<WizardStep> StepsInternal { get; private init; } = [];
 
     internal WizardLayoutContext LayoutContext { get; private init; }
-
-    internal int? ActiveStepIndex { get; set; }
-
-    internal WizardStep? ActiveStep => ActiveStepIndex.HasValue && StepsInternal.Count > ActiveStepIndex.Value ? StepsInternal[ActiveStepIndex.Value] : null;
-
-    internal bool IsFirstStepActive => ActiveStepIndex.HasValue && ActiveStepIndex.Value == 0;
-
-    internal bool IsLastStepActive => ActiveStepIndex.HasValue && ActiveStepIndex.Value == StepsInternal.Count - 1;
 
     internal Action? StateHasChangedHandler { get; init; }
 
@@ -238,16 +250,16 @@ public class Wizard : ComponentBase {
 
         if (stepIndex == StepsInternal.Count) {
             // TODO should there be verification that all steps are completed?
-                Reset();
-                await OnFinish.InvokeAsync(new WizardFinishedEventArgs());
-            }
-            else {
-            ActiveStepIndex = stepIndex;
-                await ActiveStep!.Initialize();
-            }
-
-            return true;
+            Reset();
+            await OnFinish.InvokeAsync(new WizardFinishedEventArgs());
         }
+        else {
+            ActiveStepIndex = stepIndex;
+            await ActiveStep!.Initialize();
+        }
+
+        return true;
+    }
 
     private void Reset() {
         ActiveStepIndex = null;
