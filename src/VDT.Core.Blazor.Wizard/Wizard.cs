@@ -198,40 +198,42 @@ public class Wizard : ComponentBase {
     /// Go to the previous step in this wizard if it is active and it's not on the first step
     /// </summary>
     /// <returns><see langword="true"/> if successful, otherwise <see langword="false"/></returns>
-    public async Task<bool> GoToPreviousStep() {
-        if (IsActive && !IsFirstStepActive) {
-            ActiveStepIndex--;
-            await ActiveStep!.Initialize();
-
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
+    public Task<bool> GoToPreviousStep() => GoToStep(ActiveStepIndex - 1, false);
 
     /// <summary>
     /// Attempt to complete the current step, then either move to the next step or complete the wizard
     /// </summary>
     /// <returns><see langword="true"/> if successful, otherwise <see langword="false"/></returns>
-    public async Task<bool> TryCompleteStep() {
-        if (IsActive && await ActiveStep!.TryComplete()) {
-            ActiveStepIndex++;
+    public Task<bool> TryCompleteStep() => GoToStep(ActiveStepIndex + 1, true);
 
-            if (ActiveStep == null) {
+    /// <summary>
+    /// Navigate to a specific step in the wizard if it is active
+    /// </summary>
+    /// <param name="stepIndex">Index of the step to navigate to</param>
+    /// <param name="tryCompleteStep">If <see langword="true"/>, only go to the provided step if the current step can be completed</param>
+    /// <returns><see langword="true"/> if successful, otherwise <see langword="false"/></returns>
+    public async Task<bool> GoToStep(int? stepIndex, bool tryCompleteStep) {
+        // We allow navigating to the "step" after the final one to complete the wizard
+        if (!IsActive || stepIndex == null || stepIndex < 0 || stepIndex > StepsInternal.Count) {
+            return false;
+        }
+
+        if (tryCompleteStep && !await ActiveStep!.TryComplete()) {
+            return false;
+        }
+
+        if (stepIndex == StepsInternal.Count) {
+            // TODO should there be verification that all steps are completed?
                 Reset();
                 await OnFinish.InvokeAsync(new WizardFinishedEventArgs());
             }
             else {
+            ActiveStepIndex = stepIndex;
                 await ActiveStep!.Initialize();
             }
 
             return true;
         }
-        else {
-            return false;
-        }
-    }
 
     private void Reset() {
         ActiveStepIndex = null;
