@@ -119,13 +119,14 @@ The wizard can be provided with the following CSS classes:
 
 ## Interactivity
 
-The wizard provides the following readonly properties to access state information:
+Aside from the Blazor properties shown in the above example, the wizard provides the following readonly properties to access state information:
 
 - `IsActive` - Indicates whether or not the wizard is currently active
 - `ActiveStepIndex` - Index of the currently active step if the wizard is active; otherwise `null`
 - `ActiveStep` - Currently active step if the wizard is active; otherwise `null`
 - `IsFirstStepActive` - Indicates if the first step in the wizard is the currently active one
 - `IsLastStepActive` - Indicates if the last step in the wizard is the currently active one
+- `AllSteps` - All available wizard steps in order of display
 
 The wizard provides the following methods to manipulate its state. These methods can also be accessed from the layout context using `context.Wizard`.
 
@@ -140,7 +141,8 @@ The wizard provides the following methods to manipulate its state. These methods
   active, after optionally attempting to complete the currently active step
   - This is convenient for navigating to a step relative to the current step
 
-The currently active wizard step provides the following readonly properties to access state information:
+Aside from the Blazor properties shown in the above example, the currently active wizard step provides the following readonly properties to access state
+information:
 
 - `IsActive` - Indicates whether or not the wizard step is currently active
 - `IsCompleted` - Indicates whether or not this step has been previously completed; resets to `false` when the wizard is closed

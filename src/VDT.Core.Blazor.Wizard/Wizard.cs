@@ -165,6 +165,11 @@ public class Wizard : ComponentBase {
     /// </summary>
     public bool IsLastStepActive => ActiveStepIndex.HasValue && ActiveStepIndex.Value == StepsInternal.Count - 1;
 
+    /// <summary>
+    /// All available wizard steps in order of display
+    /// </summary>
+    public IReadOnlyCollection<WizardStep> AllSteps => StepsInternal.AsReadOnly();
+
     internal List<WizardStep> StepsInternal { get; private init; } = [];
 
     internal WizardLayoutContext LayoutContext { get; private init; }
