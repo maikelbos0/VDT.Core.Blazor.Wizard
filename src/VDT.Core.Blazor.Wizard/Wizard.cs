@@ -146,12 +146,12 @@ public class Wizard : ComponentBase {
     public bool IsActive => ActiveStepIndex.HasValue;
 
     /// <summary>
-    /// Index of the currently active step if the wizard is active; otherwise <see langword="null"/>
+    /// Index of the currently active step if the wizard is active, otherwise <see langword="null"/>
     /// </summary>
     public int? ActiveStepIndex { get; internal set; }
 
     /// <summary>
-    /// Currently active step if the wizard is active; otherwise <see langword="null"/>
+    /// Currently active step if the wizard is active, otherwise <see langword="null"/>
     /// </summary>
     public WizardStep? ActiveStep => ActiveStepIndex.HasValue && StepsInternal.Count > ActiveStepIndex.Value ? StepsInternal[ActiveStepIndex.Value] : null;
 
