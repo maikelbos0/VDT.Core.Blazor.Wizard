@@ -11,23 +11,6 @@ events, and more
 - Events for initializing and attempted competion of steps
 - Optional back navigation and cancelling
 
-## Styling
-
-The wizard can be provided with the following CSS classes:
-
-- `ContainerClass` gets applied to a `div` surrounding the entire wizard when using the default layout
-- `TitleContainerClass` gets applied to a `div` surrounding the title content when using the default layout
-- `StepTitleContainerClass` gets applied to a `div` surrounding the step titles when using the default layout
-- `StepTitleClass` gets applied to the step title `div`s
-- `ActiveStepTitleClass` gets applied to the active step title `div`
-- `ButtonContainerClass` gets applied to a `div` surrounding the navigation buttons when using the default layout
-- `ButtonClass` gets applied to all navigation buttons
-- `ButtonCancelClass` gets applied to the cancel button
-- `ButtonPreviousClass` gets applied to the previous button
-- `ButtonNextClass` gets applied to the next button
-- `ButtonFinishClass` gets applied to the finish button
-- `ContentContainerClass` gets applied to a `div` surrounding the content of the currently active step when using the default layout
-
 ## Example
 
 ```
@@ -117,6 +100,23 @@ The wizard can be provided with the following CSS classes:
 }
 ```
 
+## Styling
+
+The wizard can be provided with the following CSS classes:
+
+- `ContainerClass` gets applied to a `div` surrounding the entire wizard when using the default layout
+- `TitleContainerClass` gets applied to a `div` surrounding the title content when using the default layout
+- `StepTitleContainerClass` gets applied to a `div` surrounding the step titles when using the default layout
+- `StepTitleClass` gets applied to the step title `div`s
+- `ActiveStepTitleClass` gets applied to the active step title `div`
+- `ButtonContainerClass` gets applied to a `div` surrounding the navigation buttons when using the default layout
+- `ButtonClass` gets applied to all navigation buttons
+- `ButtonCancelClass` gets applied to the cancel button
+- `ButtonPreviousClass` gets applied to the previous button
+- `ButtonNextClass` gets applied to the next button
+- `ButtonFinishClass` gets applied to the finish button
+- `ContentContainerClass` gets applied to a `div` surrounding the content of the currently active step when using the default layout
+
 ## Interactivity
 
 Aside from the Blazor properties shown in the above example, the wizard provides the following readonly properties to access state information:
@@ -146,6 +146,17 @@ information:
 
 - `IsActive` indicates whether or not the wizard step is currently active
 - `IsCompleted` indicates whether or not this step has been previously completed; resets to `false` when the wizard is closed
+
+## Events
+
+You can subscribe to several events during the wizard's life cycle:
+
+- The `Wizard.OnStart` event fires when the wizard is started.
+- The `Wizard.OnStop` event fires when the wizard is stopped.
+- The `Wizard.OnFinish` event fires when the wizard is finished because all steps of the wizard have been completed.
+- The `WizardStep.OnInitialize` event fires when a step is rendered.
+- The `WizardStep.OnTryComplete` event fires when a step is completed by clicking the Next button. The provided `WizardStepAttemptedCompleteEventArgs` lets you
+  see if the step has been previously completed and lets you cancel completion of a step.
 
 ## Custom layout
 
