@@ -147,61 +147,107 @@ information:
 - `IsActive` indicates whether or not the wizard step is currently active
 - `IsCompleted` indicates whether or not this step has been previously completed; resets to `false` when the wizard is closed
 
-## Layout
+## Custom layout
 
-A default layout is provided without any styling, but it's easy to supply your own layout using the layout context of a wizard. This gives you fine-grained
-control over which elements you want to render and which markup to use around them.
+If the default wizard layout does not suffice, it's easy to customize the layout by using the `Layout` renderfragment and the various renderfragments found on
+the `context` provided by it. If you provide a layout template the default container elements will not be used and their CSS classes will not be applied, but
+any properties for specific renderfragments for buttons or other common elements, such as CSS, titles and the various allow options will still be applied.
+Available renderfragments:
 
-### Available layout elements
+- `context.DefaultLayout` renders the wizard title content
+- `context.Title` renders the wizard title content
+- `context.StepTitles` renders the wizard step titles
+- `context.Buttons` renders the wizard cancel, previous, next and finish buttons if they are available and enabled
+- `context.ButtonCancel` renders the wizard cancel button if enabled
+- `context.ButtonPrevious` renders the wizard previous button if enabled and there is a previous step
+- `context.ButtonNext` renders the wizard next button if there is a next step
+- `context.ButtonFinish` renders the wizard finish button if this is the final step
+- `context.ActiveStepContent` renders the wizard active step content
 
-- `DefaultLayout` renders the full default layout
-- `Title` renders the `RenderFragment` `TitleContent`
-- `StepTitles` renders the titles of all steps
-- `Buttons` renders all buttons as enabled and needed in the following order:
-  - Cancel
-  - Previous
-  - Next / Finish
-- `ButtonCancel` renders the cancel button only if enabled
-- `ButtonPrevious` renders the previous button only if enabled and a previous step is available
-- `ButtonNext` renders the next button if a next step is available
-- `ButtonFinish` renders the finish button if no next step is available
-- `ActiveStepContent` renders the content of the currently active step
+For further customization, you can create a layout without using any renderfragments, instead using only properties and methods of the wizard that can be
+accessed via `context.Wizard`.
 
 ### Example
 
-<Wizard ButtonClass="wizard-button"
-        ButtonPreviousClass="wizard-button-secondary"
-        ButtonPreviousText="<< Prev"
-        ButtonFinishClass="wizard-button-primary"
-        ButtonFinishText="Complete"
-        ButtonNextClass="wizard-button-primary"
-        ButtonNextText="Next >>">
+This example wizard does not use any of the renderfragments, instead showing how to create a completely new layout with the same functionality and added
+navigation and indication for completed steps.
+
+```
+<Wizard @ref="Wizard">
+    <TitleContent>
+        <h2>Wizard title</h2>
+    </TitleContent>
     <Layout>
-        <div class="wizard">
-            <div class="wizard-title">
-                <h1>My wizard</h1>
+        <div class="card">
+            <div class="card-header">
+                @context.Title
             </div>
+            <div>
+                <div class="d-flex align-items-stretch">
+                    <div class="flex-grow-0 border-end bg-light px-3 py-2">
+                        @foreach (var step in context.Wizard.AllSteps) {
+                            <div class="me-3">
+                                @if (step.IsActive) {
+                                    <span class="fw-bold">@step.Title</span>
+                                }
+                                else if (step.IsCompleted) {
+                                    <button class="btn btn-link p-0 align-baseline" @onclick="() => context.Wizard.GoToStep(step, false)">@step.Title</button>
+                                }
+                                else {
+                                    <span>@step.Title</span>
+                                }
 
-            <div class="wizard-body">
-                @context.ActiveStepContent
+                                @if (step.IsCompleted) {
+                                    <span class="text-success fw-bold ps-1">&check;</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div class="flex-grow-1 px-3 py-2">
+                        @context.ActiveStepContent
+                    </div>
+                </div>
             </div>
+            <div class="card-footer d-flex">
+                <div class="flex-grow-1">
+                    <button class="btn btn-secondary" @onclick="context.Wizard.Stop">Stop</button>
+                </div>
 
-            <div class="wizard-buttons">
-                @context.ButtonNext
-                @context.ButtonFinish
+                <div class="flex-grow-0 btn-group">
+                    @if (!context.Wizard.IsFirstStepActive) {
+                        <button class="btn btn-secondary" @onclick="context.Wizard.GoToPreviousStep">&lt;&lt; Prev</button>
+                    }
+
+                    @if (context.Wizard.IsLastStepActive){
+                        <button class="btn btn-primary" @onclick="context.Wizard.TryCompleteStep">Complete</button>
+                    }
+                    else {
+                        <button class="btn btn-primary" @onclick="context.Wizard.TryCompleteStep">Next &gt;&gt;</button>
+                    }
+                </div>
             </div>
         </div>
     </Layout>
     <Steps>
-        <WizardStep Title="The first step">
-            Test step 1
+        <WizardStep Title="Introduction">
+            <p>
+                This is an example wizard with a custom layout. Please click Next to continue.
+            </p>
         </WizardStep>
-        <WizardStep Title="Another">
-            Test step 2
+        <WizardStep Title="Your step here">
+            <p>
+                This is the second step in this wizard. Please click Next to continue.
+            </p>
         </WizardStep>
         <WizardStep Title="Summary">
-            Test step 3
+            <p>
+                Please click Complete to finish the wizard.
+            </p>
         </WizardStep>
     </Steps>
 </Wizard>
+
+@code {
+    private Wizard? Wizard { get; set; }
+}
 ```
