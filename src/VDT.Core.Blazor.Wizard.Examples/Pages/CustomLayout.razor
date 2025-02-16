@@ -3,31 +3,32 @@
 <h1>Custom layout</h1>
 
 <p>
-    If the default wizard layout does not suffice, it's easy to customize the layout by using the <code>Layout</code> renderfragment in which you can use
-    the <code>context</code> parameter to place all wizard components. <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example
-    wizard.</a>
+    If the default wizard layout does not suffice, it's easy to customize the layout by using the <code>Layout</code> renderfragment and the various 
+    renderfragments found on the <code>context</code> provided by it. If you provide a layout template the default container elements will not be used and
+    their CSS classes will not be applied, but any properties for specific renderfragments for buttons or other common elements, such as CSS, titles and the
+    various allow options will still be applied. Available renderfragments:
 </p>
+
+<ul>
+    <li><code>context.DefaultLayout</code> renders the wizard title content</li>
+    <li><code>context.Title</code> renders the wizard title content</li>
+    <li><code>context.StepTitles</code> renders the wizard step titles</li>
+    <li><code>context.Buttons</code> renders the wizard cancel, previous, next and finish buttons if they are available and enabled</li>
+    <li><code>context.ButtonCancel</code> renders the wizard cancel button if enabled</li>
+    <li><code>context.ButtonPrevious</code> renders the wizard previous button if enabled and there is a previous step</li>
+    <li><code>context.ButtonNext</code> renders the wizard next button if there is a next step</li>
+    <li><code>context.ButtonFinish</code> renders the wizard finish button if this is the final step</li>
+    <li><code>context.ActiveStepContent</code> renders the wizard active step content</li>
+</ul>
 
 <p>
-    If you provide a layout template the default container elements will not be used and their CSS classes will not be applied. Button CSS classes and text
-    will still be applied as normal. If you choose to place the individual buttons rather than the <code>Buttons</code> fragment, you can opt to leave out
-    the cancel and previous buttons even when they are enabled.
+    For further customization, you can create a layout without using any renderfragments, instead using only properties and methods of the wizard that can be
+    accessed via <code>context.Wizard</code>. The example wizard rendered here does not use any of the renderfragments, instead showing how to create a
+    completely new layout with the same functionality and added navigation and indication for completed steps.
+    <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example wizard.</a>
 </p>
 
-<Wizard @ref="Wizard"
-        StepTitleClass="me-3"
-        ActiveStepTitleClass="fw-bold"
-        AllowCancel="true"
-        AllowPrevious="true"
-        ButtonClass="btn"
-        ButtonCancelClass="btn-secondary"
-        ButtonCancelText="Stop"
-        ButtonPreviousClass="btn-secondary"
-        ButtonPreviousText="<< Prev"
-        ButtonFinishClass="btn-primary"
-        ButtonFinishText="Complete"
-        ButtonNextClass="btn-primary"
-        ButtonNextText="Next >>">
+<Wizard @ref="Wizard">
     <TitleContent>
         <h2>Wizard title</h2>
     </TitleContent>
@@ -39,22 +40,45 @@
             <div>
                 <div class="d-flex align-items-stretch">
                     <div class="flex-grow-0 border-end bg-light px-3 py-2">
-                        @context.StepTitles
+                        @foreach (var step in context.Wizard.AllSteps) {
+                            <div class="me-3">
+                                @if (step.IsActive) {
+                                    <span class="fw-bold">@step.Title</span>
+                                }
+                                else if (step.IsCompleted) {
+                                    <button class="btn btn-link p-0 align-baseline" @onclick="() => context.Wizard.GoToStep(step, false)">@step.Title</button>
+                                }
+                                else {
+                                    <span>@step.Title</span>
+                                }
+
+                                @if (step.IsCompleted) {
+                                    <span class="text-success fw-bold ps-1">&check;</span>
+                                }
+                            </div>
+                        }
                     </div>
                     <div class="flex-grow-1 px-3 py-2">
-                        @context.Content
+                        @context.ActiveStepContent
                     </div>
                 </div>
             </div>
             <div class="card-footer d-flex">
                 <div class="flex-grow-1">
-                    @context.ButtonCancel
+                    <button class="btn btn-secondary" @onclick="context.Wizard.Stop">Stop</button>
                 </div>
 
                 <div class="flex-grow-0 btn-group">
-                    @context.ButtonPrevious
-                    @context.ButtonNext
-                    @context.ButtonFinish
+                    @if (!context.Wizard.IsFirstStepActive) {
+                        <button class="btn btn-secondary" @onclick="context.Wizard.GoToPreviousStep">&lt;&lt; Prev</button>
+                    }
+
+                    @if (context.Wizard.IsLastStepActive){
+                        <button class="btn btn-primary" @onclick="context.Wizard.TryCompleteStep">Complete</button>
+                    }
+                    else {
+                        <button class="btn btn-primary" @onclick="context.Wizard.TryCompleteStep">Next &gt;&gt;</button>
+                    }
                 </div>
             </div>
         </div>
