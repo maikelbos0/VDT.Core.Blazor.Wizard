@@ -24,7 +24,8 @@
 <p>
     For further customization, you can create a layout without using any renderfragments, instead using only properties and methods of the wizard that can be
     accessed via <code>context.Wizard</code>. The example wizard rendered here does not use any of the renderfragments, instead showing how to create a
-    completely new layout with the same functionality. <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example wizard.</a>
+    completely new layout with the same functionality and added navigation and indication for completed steps.
+    <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example wizard.</a>
 </p>
 
 <Wizard @ref="Wizard">
@@ -40,7 +41,21 @@
                 <div class="d-flex align-items-stretch">
                     <div class="flex-grow-0 border-end bg-light px-3 py-2">
                         @foreach (var step in context.Wizard.AllSteps) {
-                            <div class="me-3 @(step.IsActive ? "fw-bold" : "")">@step.Title</div>
+                            <div class="me-3">
+                                @if (step.IsActive) {
+                                    <span class="fw-bold">@step.Title</span>
+                                }
+                                else if (step.IsCompleted) {
+                                    <button class="btn btn-link p-0 align-baseline" @onclick="() => context.Wizard.GoToStep(step, false)">@step.Title</button>
+                                }
+                                else {
+                                    <span>@step.Title</span>
+                                }
+
+                                @if (step.IsCompleted) {
+                                    <span class="text-success fw-bold ps-1">&check;</span>
+                                }
+                            </div>
                         }
                     </div>
                     <div class="flex-grow-1 px-3 py-2">

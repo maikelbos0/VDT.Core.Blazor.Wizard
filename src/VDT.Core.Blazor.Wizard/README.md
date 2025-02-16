@@ -134,12 +134,12 @@ The wizard provides the following methods to manipulate its state. These methods
 - `Stop()` closes and reset the wizard if it's currently active
 - `GoToPreviousStep()` goes to the previous step in this wizard if it is active and it's not on the first step
 - `TryCompleteStep()` attempts to complete the current step, then either move to the next step or complete the wizard
-- `GoToStep(int stepIndex, bool tryCompleteStep)` navigates to a specific step in the wizard if it is active, after optionally attempting to complete the
-  currently active step
-  -  Navigating to the step after the last available step completes and resets the wizard
-- `GoToStep(StepIndexProvider stepIndexProvider, bool tryCompleteStep)` navigates to a specific step based on the currently active step in the wizard if it is
-  active, after optionally attempting to complete the currently active step
-  - This is convenient for navigating to a step relative to the current step
+- `GoToStep(...)` navigates to a specific step in the wizard if it is active, after optionally attempting to complete the currently active step
+  - Navigating to the step after the last available step completes and resets the wizard
+  - Available overloads:  
+    `GoToStep(WizardStep step, bool tryCompleteStep)`  
+    `GoToStep(int stepIndex, bool tryCompleteStep)`  
+    `GoToStep(StepIndexProvider stepIndexProvider, bool tryCompleteStep)`  
 
 Aside from the Blazor properties shown in the above example, the currently active wizard step provides the following readonly properties to access state
 information:

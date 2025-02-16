@@ -234,6 +234,14 @@ public class Wizard : ComponentBase {
     /// <summary>
     /// Navigate to a specific step in the wizard if it is active, after optionally attempting to complete the currently active step
     /// </summary>
+    /// <param name="step">Step to navigate to</param>
+    /// <param name="tryCompleteStep">If <see langword="true"/>, only go to the provided step if the current step can be completed</param>
+    /// <returns><see langword="true"/> if successful, otherwise <see langword="false"/></returns>
+    public Task<bool> GoToStep(WizardStep step, bool tryCompleteStep) => GoToStep(_ => StepsInternal.IndexOf(step), tryCompleteStep);
+
+    /// <summary>
+    /// Navigate to a specific step in the wizard if it is active, after optionally attempting to complete the currently active step
+    /// </summary>
     /// <param name="stepIndexProvider">Method to determine the step to navigate to</param>
     /// <param name="tryCompleteStep">If <see langword="true"/>, only go to the provided step if the current step can be completed</param>
     /// <returns><see langword="true"/> if successful, otherwise <see langword="false"/></returns>

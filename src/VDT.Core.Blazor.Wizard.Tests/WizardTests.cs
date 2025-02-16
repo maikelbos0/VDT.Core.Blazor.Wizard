@@ -291,7 +291,7 @@ public class WizardTests {
     }
 
     [Fact]
-    public async Task GoToStep_Initializes_Next_Step() {
+    public async Task GoToStep_StepIndex_Initializes_Next_Step() {
         WizardStepInitializedEventArgs? arguments = null;
         var wizard = new Wizard() {
             ActiveStepIndex = 0
@@ -304,6 +304,25 @@ public class WizardTests {
         wizard.StepsInternal.Add(step);
 
         Assert.True(await wizard.GoToStep(1, false));
+
+        Assert.Equal(1, wizard.ActiveStepIndex);
+        Assert.NotNull(arguments);
+    }
+
+    [Fact]
+    public async Task GoToStep_Step_Initializes_Next_Step() {
+        WizardStepInitializedEventArgs? arguments = null;
+        var wizard = new Wizard() {
+            ActiveStepIndex = 0
+        };
+        var step = new WizardStep() {
+            OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
+        };
+
+        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(step);
+
+        Assert.True(await wizard.GoToStep(step, false));
 
         Assert.Equal(1, wizard.ActiveStepIndex);
         Assert.NotNull(arguments);
