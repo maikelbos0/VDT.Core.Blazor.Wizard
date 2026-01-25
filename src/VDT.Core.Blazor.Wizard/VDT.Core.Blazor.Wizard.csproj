@@ -3,7 +3,6 @@
 	<PropertyGroup>
 		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
-		<WarningsAsErrors>nullable</WarningsAsErrors>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -21,9 +20,6 @@
 		<PackageProjectUrl>https://github.com/maikelbos0/VDT.Core.Blazor.Wizard</PackageProjectUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	</PropertyGroup>
-
-	<PropertyGroup>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
