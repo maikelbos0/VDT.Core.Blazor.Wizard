@@ -7,12 +7,11 @@
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.Blazor.Wizard</PackageId>
-		<Version>5.0.0</Version>
+		<Version>6.0.0</Version>
 		<Title>VDT.Core.Blazor.Wizard</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Blazor component that helps you create wizard components with sequential steps, forward/back navigation, conditional completion of steps, step- and wizard-level events, and more</Description>
-		<PackageReleaseNotes>- Made existing methods and properties publicly available so they can be used in layout
-- Added public GoToStep method for navigating to any wizard step</PackageReleaseNotes>
+		<PackageReleaseNotes>- Added explicit .net 10.0 support</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2022 Maikel Bos</Copyright>
