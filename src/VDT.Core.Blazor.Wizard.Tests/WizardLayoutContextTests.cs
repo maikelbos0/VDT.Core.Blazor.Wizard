@@ -9,11 +9,10 @@ using Xunit;
 namespace VDT.Core.Blazor.Wizard.Tests;
 
 public class WizardLayoutContextTests {
-    // These tests are likely fragile; if they break when updating Microsoft.AspNetCore.Components it may be a a good idea to wrap the RenderTreeBuilder.
 
 #pragma warning disable BL0006 // Do not use RenderTree types
     public class TestContext {
-        public static TestContext CreateTestContext(Wizard wizard, Func<WizardLayoutContext, RenderFragment> getRenderMethod) {
+        public static TestContext Create(Wizard wizard, Func<WizardLayoutContext, RenderFragment> getRenderMethod) {
             var context = new WizardLayoutContext(wizard);
             var builder = new RenderTreeBuilder();
             var renderFragment = getRenderMethod(context);
@@ -73,7 +72,7 @@ public class WizardLayoutContextTests {
         var wizard = new Wizard() {
             ActiveStepIndex = 0
         };
-        var context = TestContext.CreateTestContext(wizard, c => c.CascadingValue);
+        var context = TestContext.Create(wizard, c => c.CascadingValue);
 
         context.AssertFrameCount(3);
         context.AssertComponent<CascadingValue<Wizard>>(0, 3);
@@ -84,7 +83,7 @@ public class WizardLayoutContextTests {
     [Fact]
     public void CascadingValue_Does_Not_Render_When_Inactive() {
         var wizard = new Wizard();
-        var context = TestContext.CreateTestContext(wizard, c => c.CascadingValue);
+        var context = TestContext.Create(wizard, c => c.CascadingValue);
 
         context.AssertFrameCount(0);
     }
@@ -94,7 +93,7 @@ public class WizardLayoutContextTests {
         var wizard = new Wizard() {
             Steps = builder => builder.AddContent(1, "Step")
         };
-        var context = TestContext.CreateTestContext(wizard, c => c.Content);
+        var context = TestContext.Create(wizard, c => c.Content);
 
         context.AssertFrameCount(20);
         context.AssertContent(1, "Step");
@@ -106,7 +105,7 @@ public class WizardLayoutContextTests {
             Steps = builder => builder.AddContent(1, "Step"),
             Layout = context => builder => builder.AddContent(1, "Test")
         };
-        var context = TestContext.CreateTestContext(wizard, c => c.Content);
+        var context = TestContext.Create(wizard, c => c.Content);
 
         context.AssertFrameCount(4);
         context.AssertContent(1, "Step");
@@ -124,11 +123,11 @@ public class WizardLayoutContextTests {
             ButtonContainerClass = "button-container",
             ContentContainerClass = "content-container"
         };
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step",
             ChildContent = builder => builder.AddContent(1, "Step content")
         });
-        var context = TestContext.CreateTestContext(wizard, c => c.DefaultLayout);
+        var context = TestContext.Create(wizard, c => c.DefaultLayout);
 
         context.AssertFrameCount(29);
         context.AssertElement(0, "div", 29);
@@ -156,7 +155,7 @@ public class WizardLayoutContextTests {
         var wizard = new Wizard() {
             TitleContent = builder => builder.AddContent(1, "<h1>Title</h1>")
         };
-        var context = TestContext.CreateTestContext(wizard, c => c.Title);
+        var context = TestContext.Create(wizard, c => c.Title);
 
         context.AssertFrameCount(2);
         context.AssertContent(1, "<h1>Title</h1>");
@@ -169,13 +168,13 @@ public class WizardLayoutContextTests {
             StepTitleClass = "step-title",
             ActiveStepTitleClass = "active"
         };
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 1"
         });
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 2"
         });
-        var context = TestContext.CreateTestContext(wizard, c => c.StepTitles);
+        var context = TestContext.Create(wizard, c => c.StepTitles);
 
         context.AssertFrameCount(6);
 
@@ -195,16 +194,16 @@ public class WizardLayoutContextTests {
             AllowCancel = true,
             AllowPrevious = true,
         };
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 1"
         });
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 2"
         });
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 3"
         });
-        var context = TestContext.CreateTestContext(wizard, c => c.Buttons);
+        var context = TestContext.Create(wizard, c => c.Buttons);
 
         context.AssertFrameCount(16);
 
@@ -226,7 +225,7 @@ public class WizardLayoutContextTests {
             ButtonClass = "btn",
             ButtonCancelClass = "btn-secondary"
         };
-        var context = TestContext.CreateTestContext(wizard, c => c.ButtonCancel);
+        var context = TestContext.Create(wizard, c => c.ButtonCancel);
 
         context.AssertFrameCount(4);
 
@@ -239,7 +238,7 @@ public class WizardLayoutContextTests {
     [Fact]
     public void ButtonCancel_Does_Not_Render_When_Not_Allowed() {
         var wizard = new Wizard();
-        var context = TestContext.CreateTestContext(wizard, c => c.ButtonCancel);
+        var context = TestContext.Create(wizard, c => c.ButtonCancel);
 
         context.AssertFrameCount(0);
     }
@@ -252,7 +251,7 @@ public class WizardLayoutContextTests {
             ButtonClass = "btn",
             ButtonPreviousClass = "btn-secondary"
         };
-        var context = TestContext.CreateTestContext(wizard, c => c.ButtonPrevious);
+        var context = TestContext.Create(wizard, c => c.ButtonPrevious);
 
         context.AssertFrameCount(4);
 
@@ -265,7 +264,7 @@ public class WizardLayoutContextTests {
     [Fact]
     public void ButtonPrevious_Does_Not_Render_When_Not_Allowed() {
         var wizard = new Wizard();
-        var context = TestContext.CreateTestContext(wizard, c => c.ButtonPrevious);
+        var context = TestContext.Create(wizard, c => c.ButtonPrevious);
 
         context.AssertFrameCount(0);
     }
@@ -276,10 +275,10 @@ public class WizardLayoutContextTests {
             ActiveStepIndex = 0,
             AllowPrevious = true
         };
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 1"
         });
-        var context = TestContext.CreateTestContext(wizard, c => c.ButtonPrevious);
+        var context = TestContext.Create(wizard, c => c.ButtonPrevious);
 
         context.AssertFrameCount(0);
     }
@@ -292,13 +291,13 @@ public class WizardLayoutContextTests {
             ButtonClass = "btn",
             ButtonNextClass = "btn-primary"
         };
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 1"
         });
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 2"
         });
-        var context = TestContext.CreateTestContext(wizard, c => c.ButtonNext);
+        var context = TestContext.Create(wizard, c => c.ButtonNext);
 
         context.AssertFrameCount(4);
 
@@ -313,10 +312,10 @@ public class WizardLayoutContextTests {
         var wizard = new Wizard() {
             ActiveStepIndex = 0
         };
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 1"
         });
-        var context = TestContext.CreateTestContext(wizard, c => c.ButtonNext);
+        var context = TestContext.Create(wizard, c => c.ButtonNext);
 
         context.AssertFrameCount(0);
     }
@@ -329,13 +328,13 @@ public class WizardLayoutContextTests {
             ButtonClass = "btn",
             ButtonFinishClass = "btn-primary"
         };
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 1"
         });
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 2"
         });
-        var context = TestContext.CreateTestContext(wizard, c => c.ButtonFinish);
+        var context = TestContext.Create(wizard, c => c.ButtonFinish);
 
         context.AssertFrameCount(4);
 
@@ -350,13 +349,13 @@ public class WizardLayoutContextTests {
         var wizard = new Wizard() {
             ActiveStepIndex = 0
         };
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 1"
         });
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             Title = "Step 2"
         });
-        var context = TestContext.CreateTestContext(wizard, c => c.ButtonFinish);
+        var context = TestContext.Create(wizard, c => c.ButtonFinish);
 
         context.AssertFrameCount(0);
     }
@@ -367,10 +366,10 @@ public class WizardLayoutContextTests {
         var wizard = new Wizard() {
             ActiveStepIndex = 0
         };
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             ChildContent = renderFragment
         });
-        var context = TestContext.CreateTestContext(wizard, c => c.ActiveStepContent);
+        var context = TestContext.Create(wizard, c => c.ActiveStepContent);
 
         context.AssertFrameCount(1);
         renderFragment.Received().Invoke(Arg.Any<RenderTreeBuilder>());
@@ -383,7 +382,7 @@ public class WizardLayoutContextTests {
             ChildContent = builder => { }
         };
         wizard.StepsInternal.Add(activeStep);
-        var context = TestContext.CreateTestContext(wizard, c => c.ActiveStepContent);
+        var context = TestContext.Create(wizard, c => c.ActiveStepContent);
 
         context.AssertFrameCount(0);
     }
