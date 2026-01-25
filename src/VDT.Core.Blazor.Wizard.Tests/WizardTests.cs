@@ -14,8 +14,8 @@ public class WizardTests {
             ActiveStepIndex = activeStepIndex
         };
 
-        wizard.StepsInternal.Add(new WizardStep());
-        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new());
+        wizard.StepsInternal.Add(new());
 
         Assert.Equal(wizard.StepsInternal[activeStepIndex], wizard.ActiveStep);
     }
@@ -28,8 +28,8 @@ public class WizardTests {
             ActiveStepIndex = activeStepIndex
         };
 
-        wizard.StepsInternal.Add(new WizardStep());
-        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new());
+        wizard.StepsInternal.Add(new());
 
         Assert.Null(wizard.ActiveStep);
     }
@@ -44,8 +44,8 @@ public class WizardTests {
             ActiveStepIndex = activeStepIndex
         };
 
-        wizard.StepsInternal.Add(new WizardStep());
-        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new());
+        wizard.StepsInternal.Add(new());
 
         Assert.Equal(expectedActive, wizard.IsFirstStepActive);
     }
@@ -60,8 +60,8 @@ public class WizardTests {
             ActiveStepIndex = activeStepIndex
         };
 
-        wizard.StepsInternal.Add(new WizardStep());
-        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new());
+        wizard.StepsInternal.Add(new());
 
         Assert.Equal(expectedActive, wizard.IsLastStepActive);
     }
@@ -233,7 +233,7 @@ public class WizardTests {
             OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
         };
 
-        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new());
         wizard.StepsInternal.Add(step);
 
         Assert.True(await wizard.TryCompleteStep());
@@ -264,7 +264,7 @@ public class WizardTests {
             ActiveStepIndex = 0
         };
 
-        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new());
 
         Assert.True(await wizard.TryCompleteStep());
 
@@ -278,7 +278,7 @@ public class WizardTests {
         WizardStepAttemptedCompleteEventArgs? wizardStepAttemptedCompleteEventArgs = null;
         var wizard = new Wizard();
 
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => wizardStepInitializedEventArgs = args),
             OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => wizardStepAttemptedCompleteEventArgs = args)
         });
@@ -300,7 +300,7 @@ public class WizardTests {
             OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
         };
 
-        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new());
         wizard.StepsInternal.Add(step);
 
         Assert.True(await wizard.GoToStep(1, false));
@@ -319,7 +319,7 @@ public class WizardTests {
             OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
         };
 
-        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new());
         wizard.StepsInternal.Add(step);
 
         Assert.True(await wizard.GoToStep(step, false));
@@ -334,7 +334,7 @@ public class WizardTests {
             ActiveStepIndex = 0
         };
 
-        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new());
 
         Assert.True(await wizard.GoToStep(1, false));
 
@@ -353,7 +353,7 @@ public class WizardTests {
         };
 
         wizard.StepsInternal.Add(step);
-        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new());
 
         Assert.True(await wizard.GoToStep(1, false));
 
@@ -368,11 +368,11 @@ public class WizardTests {
             ActiveStepIndex = 0
         };
 
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args),
             OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => args.IsCancelled = true)
         });
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => arguments = args)
         });
 
@@ -392,11 +392,11 @@ public class WizardTests {
             ActiveStepIndex = 0
         };
 
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => wizardStepInitializedEventArgs = args),
             OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => wizardStepAttemptedCompleteEventArgs = args)
         });
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => wizardStepInitializedEventArgs = args),
             OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => wizardStepAttemptedCompleteEventArgs = args)
         });
@@ -414,7 +414,7 @@ public class WizardTests {
         WizardStepAttemptedCompleteEventArgs? wizardStepAttemptedCompleteEventArgs = null;
         var wizard = new Wizard();
 
-        wizard.StepsInternal.Add(new WizardStep() {
+        wizard.StepsInternal.Add(new() {
             OnInitialize = EventCallback.Factory.Create<WizardStepInitializedEventArgs>(this, args => wizardStepInitializedEventArgs = args),
             OnTryComplete = EventCallback.Factory.Create<WizardStepAttemptedCompleteEventArgs>(this, args => wizardStepAttemptedCompleteEventArgs = args)
         });

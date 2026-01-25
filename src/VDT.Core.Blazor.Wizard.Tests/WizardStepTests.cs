@@ -16,7 +16,7 @@ public class WizardStepTests {
             Wizard = wizard
         };
 
-        wizard.StepsInternal.Add(new WizardStep());
+        wizard.StepsInternal.Add(new());
         wizard.StepsInternal.Add(step);
 
         Assert.Equal(expectedIsActive, step.IsActive);
