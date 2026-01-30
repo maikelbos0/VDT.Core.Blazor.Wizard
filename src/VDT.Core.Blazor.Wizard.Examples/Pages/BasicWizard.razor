@@ -26,7 +26,7 @@
 	<li><code>ContentContainerClass</code> gets applied to a <code>div</code> surrounding the content of the currently active step when using the default layout</li>
 </ul>
 
-<div class="card">
+<div class="@(Wizard?.IsActive ?? false ? "card" : "")">
 	<Wizard @ref="Wizard"
 			ContainerClass="card-body"
 			TitleContainerClass="card-title mb-3"

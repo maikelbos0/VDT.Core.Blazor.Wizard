@@ -35,7 +35,7 @@
     <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor/components/event-handling">Microsoft documentation on Blazor event handling</a>.
 </p>
 
-<div class="card">
+<div class="@(Wizard?.IsActive ?? false ? "card" : "")">
     <Wizard @ref="Wizard"
             ContainerClass="card-body"
             TitleContainerClass="card-title mb-3"
