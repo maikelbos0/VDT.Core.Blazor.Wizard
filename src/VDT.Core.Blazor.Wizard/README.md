@@ -100,9 +100,7 @@ events, and more
 }
 ```
 
-## Styling
-
-The wizard can be provided with the following CSS classes:
+## CSS class properties
 
 - `ContainerClass` gets applied to a `div` surrounding the entire wizard when using the default layout
 - `TitleContainerClass` gets applied to a `div` surrounding the title content when using the default layout
@@ -117,39 +115,9 @@ The wizard can be provided with the following CSS classes:
 - `ButtonFinishClass` gets applied to the finish button
 - `ContentContainerClass` gets applied to a `div` surrounding the content of the currently active step when using the default layout
 
-## Interactivity
-
-Aside from the Razor parameters shown in the above example, the wizard provides the following readonly properties to access state information:
-
-- `IsActive` indicates whether or not the wizard is currently active
-- `ActiveStepIndex` is the index of the currently active step if the wizard is active, otherwise `null`
-- `ActiveStep` is the currently active step if the wizard is active, otherwise `null`
-- `IsFirstStepActive` indicates if the first step in the wizard is the currently active one
-- `IsLastStepActive` indicates if the last step in the wizard is the currently active one
-- `AllSteps` returns all available wizard steps in order of display
-
-The wizard provides the following methods to manipulate its state. These methods can also be accessed from the layout context using `context.Wizard`.
-
-- `Start()` opens the wizard at the first step if it's not currently active
-- `Stop()` closes and reset the wizard if it's currently active
-- `GoToPreviousStep()` goes to the previous step in this wizard if it is active and it's not on the first step
-- `TryCompleteStep()` attempts to complete the current step, then either move to the next step or complete the wizard
-- `GoToStep(...)` navigates to a specific step in the wizard if it is active, after optionally attempting to complete the currently active step
-  - Navigating to the step after the last available step completes and resets the wizard
-  - Available overloads:  
-    `GoToStep(WizardStep step, bool tryCompleteStep)`  
-    `GoToStep(int stepIndex, bool tryCompleteStep)`  
-    `GoToStep(StepIndexProvider stepIndexProvider, bool tryCompleteStep)`  
-
-Aside from the Razor parameters shown in the above example, the currently active wizard step provides the following readonly properties to access state
-information:
-
-- `IsActive` indicates whether or not the wizard step is currently active
-- `IsCompleted` indicates whether or not this step has been previously completed; resets to `false` when the wizard is closed
-
 ## Events
 
-You can subscribe to several events during the wizard's life cycle:
+You can subscribe to several events during the wizard's life cycle; most are informational only but some allow you to manipulate the wizard's behaviour.
 
 - The `Wizard.OnStart` event fires when the wizard is started.
 - The `Wizard.OnStop` event fires when the wizard is stopped.
@@ -163,7 +131,8 @@ You can subscribe to several events during the wizard's life cycle:
 If the default wizard layout does not suffice, it's easy to customize the layout by using the `Layout` renderfragment and the various renderfragments found on
 the `context` provided by it. If you provide a layout template the default container elements will not be used and their CSS classes will not be applied, but
 any properties for specific renderfragments for buttons or other common elements, such as CSS, titles and the various allow options will still be applied.
-Available renderfragments:
+
+### Renderfragments
 
 - `context.DefaultLayout` renders the wizard title content
 - `context.Title` renders the wizard title content
@@ -176,7 +145,38 @@ Available renderfragments:
 - `context.ActiveStepContent` renders the wizard active step content
 
 For further customization, you can create a layout without using any renderfragments, instead using only properties and methods of the wizard that can be
-accessed via `context.Wizard`.
+accessed via <code>context.Wizard</code>.
+
+### Wizard properties
+
+This does not list Blazor parameters such as button texts or any of the CSS classes.
+
+- `IsActive` indicates whether or not the wizard is currently active
+- `ActiveStepIndex` is the index of the currently active step if the wizard is active, otherwise `null`
+- `ActiveStep` is the currently active step if the wizard is active, otherwise `null`
+- `IsFirstStepActive` indicates if the first step in the wizard is the currently active one
+- `IsLastStepActive` indicates if the last step in the wizard is the currently active one
+- `AllSteps` returns all available wizard steps in order of display
+
+### Wizard methods
+
+- `Start()` opens the wizard at the first step if it's not currently active
+- `Stop()` closes and reset the wizard if it's currently active
+- `GoToPreviousStep()` goes to the previous step in this wizard if it is active and it's not on the first step
+- `TryCompleteStep()` attempts to complete the current step, then either move to the next step or complete the wizard
+- `GoToStep(...)` navigates to a specific step in the wizard if it is active, after optionally attempting to complete the currently active step
+  - Navigating to the step after the last available step completes and resets the wizard
+  - Available overloads:
+    - `GoToStep(WizardStep step, bool tryCompleteStep)`
+    - `GoToStep(int stepIndex, bool tryCompleteStep)`
+    - `GoToStep(StepIndexProvider stepIndexProvider, bool tryCompleteStep)`
+
+### Wizard step properties
+
+This does not list Blazor parameters such as `Title`.
+
+- `IsActive` indicates whether or not the wizard step is currently active
+- `IsCompleted` indicates whether or not this step has been previously completed; resets to `false` when the wizard is closed
 
 ### Example
 
