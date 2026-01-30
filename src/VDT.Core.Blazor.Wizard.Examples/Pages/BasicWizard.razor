@@ -3,131 +3,150 @@
 <h1>Basic wizard</h1>
 
 <p>
-    The wizard is a control that allows you to guide your users through a series of sequential steps. You can use various parameters to control its appearance
-    and functionality. This example uses bootstrap css classes for styling, the text on all controls has been explicitly provided, and it has the options for 
-    cancelling the wizard and going to the previous step enabled. Also, one of the steps can not be completed until the <code>EditForm</code> validation
-    succeeds. <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example wizard.</a>
+	The wizard is a control that allows you to guide your users through a series of sequential steps. You can use various parameters to control its appearance
+	and functionality. This example uses bootstrap css classes for styling, the text on all controls has been explicitly provided, and it has the options for
+	cancelling the wizard and going to the previous step enabled. Also, one of the steps can not be completed until the <code>EditForm</code> validation
+	succeeds. <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example wizard.</a>
 </p>
 
+<h2>Style</h2>
+
+<p>The following CSS class properties can be set to apply styles to the wizard:</p>
+
+<ul>
+	<li><code>ContainerClass</code> gets applied to a <code>div</code> surrounding the entire wizard when using the default layout</li>
+	<li><code>TitleContainerClass</code> gets applied to a <code>div</code> surrounding the title content when using the default layout</li>
+	<li><code>StepTitleContainerClass</code> gets applied to a <code>div</code> surrounding the step titles when using the default layout</li>
+	<li><code>StepTitleClass</code> gets applied to the step title <code>div</code>s</li>
+	<li><code>ActiveStepTitleClass</code> gets applied to the active step title <code>div</code></li>
+	<li><code>ButtonContainerClass</code> gets applied to a <code>div</code> surrounding the navigation buttons when using the default layout</li>
+	<li><code>ButtonClass</code> gets applied to all navigation buttons</li>
+	<li><code>ButtonCancelClass</code> gets applied to the cancel button</li>
+	<li><code>ButtonPreviousClass</code> gets applied to the previous button</li>
+	<li><code>ButtonNextClass</code> gets applied to the next button</li>
+	<li><code>ButtonFinishClass</code> gets applied to the finish button</li>
+	<li><code>ContentContainerClass</code> gets applied to a <code>div</code> surrounding the content of the currently active step when using the default layout</li>
+</ul>
+
 <div class="card">
-    <Wizard @ref="Wizard"
-            ContainerClass="card-body"
-            TitleContainerClass="card-title mb-3"
-            StepTitleContainerClass="mb-3 d-flex"
-            StepTitleClass="me-3"
-            ActiveStepTitleClass="fw-bold"
-            AllowCancel="true"
-            AllowPrevious="true"
-            ButtonContainerClass="mb-3 btn-group align-content-end"
-            ButtonClass="btn"
-            ButtonCancelClass="btn-secondary"
-            ButtonCancelText="Stop"
-            ButtonPreviousClass="btn-secondary"
-            ButtonPreviousText="<< Prev"
-            ButtonFinishClass="btn-primary"
-            ButtonFinishText="Complete"
-            ButtonNextClass="btn-primary"
-            ButtonNextText="Next >>">
-        <TitleContent>
-            <h2>Wizard title</h2>
-        </TitleContent>
-        <Steps>
-            <WizardStep Title="Introduction">
-                <p>
-                    This is an example wizard for multi step account creation. Please click Next to continue.
-                </p>
-            </WizardStep>
-            <WizardStep Title="Your account" OnTryComplete="args => args.IsCancelled = !AccountContext.Validate()">
-                <p>
-                    Please fill out the form below to create an account. These fields are required and the wizard will not continue if you don't fill out this
-                    section.
-                </p>
+	<Wizard @ref="Wizard"
+			ContainerClass="card-body"
+			TitleContainerClass="card-title mb-3"
+			StepTitleContainerClass="mb-3 d-flex"
+			StepTitleClass="me-3"
+			ActiveStepTitleClass="fw-bold"
+			AllowCancel="true"
+			AllowPrevious="true"
+			ButtonContainerClass="mb-3 btn-group align-content-end"
+			ButtonClass="btn"
+			ButtonCancelClass="btn-secondary"
+			ButtonCancelText="Stop"
+			ButtonPreviousClass="btn-secondary"
+			ButtonPreviousText="<< Prev"
+			ButtonFinishClass="btn-primary"
+			ButtonFinishText="Complete"
+			ButtonNextClass="btn-primary"
+			ButtonNextText="Next >>">
+		<TitleContent>
+			<h2>Wizard title</h2>
+		</TitleContent>
+		<Steps>
+			<WizardStep Title="Introduction">
+				<p>
+					This is an example wizard for multi step account creation. Please click Next to continue.
+				</p>
+			</WizardStep>
+			<WizardStep Title="Your account" OnTryComplete="args => args.IsCancelled = !AccountContext.Validate()">
+				<p>
+					Please fill out the form below to create an account. These fields are required and the wizard will not continue if you don't fill out this
+					section.
+				</p>
 
-                <EditForm EditContext="AccountContext">
-                    <DataAnnotationsValidator />
+				<EditForm EditContext="AccountContext">
+					<DataAnnotationsValidator />
 
-                    <div class="mb-3">
-                        <label for="accountDisplayName" class="form-label">Display name</label>
-                        <InputText @bind-Value="Account.DisplayName" id="accountDisplayName" class="form-control" />
-                        <ValidationMessage For="() => Account.DisplayName" class="text-danger fs-6" />
-                    </div>
+					<div class="mb-3">
+						<label for="accountDisplayName" class="form-label">Display name</label>
+						<InputText @bind-Value="Account.DisplayName" id="accountDisplayName" class="form-control" />
+						<ValidationMessage For="() => Account.DisplayName" class="text-danger fs-6" />
+					</div>
 
-                    <div class="mb-3">
-                        <label for="accountEmailAddress" class="form-label">Email address</label>
-                        <InputText @bind-Value="Account.EmailAddress" id="accountEmailAddress" class="form-control" placeholder="name@example.com" />
-                        <ValidationMessage For="() => Account.EmailAddress" class="text-danger fs-6" />
-                    </div>
-                </EditForm>
-            </WizardStep>
-            <WizardStep Title="Preferences">
-                <p>
-                    Please select your preferences.
-                </p>
+					<div class="mb-3">
+						<label for="accountEmailAddress" class="form-label">Email address</label>
+						<InputText @bind-Value="Account.EmailAddress" id="accountEmailAddress" class="form-control" placeholder="name@example.com" />
+						<ValidationMessage For="() => Account.EmailAddress" class="text-danger fs-6" />
+					</div>
+				</EditForm>
+			</WizardStep>
+			<WizardStep Title="Preferences">
+				<p>
+					Please select your preferences.
+				</p>
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="accountShowOnlineStatus" @bind="Account.ShowOnlineStatus" />
-                    <label class="form-check-label" for="accountShowOnlineStatus">Show online status</label>
-                </div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" id="accountShowOnlineStatus" @bind="Account.ShowOnlineStatus" />
+					<label class="form-check-label" for="accountShowOnlineStatus">Show online status</label>
+				</div>
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="accountSendNotifications" @bind="Account.SendNotifications" />
-                    <label class="form-check-label" for="accountSendNotifications">Send notifications</label>
-                </div>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" id="accountSendNotifications" @bind="Account.SendNotifications" />
+					<label class="form-check-label" for="accountSendNotifications">Send notifications</label>
+				</div>
 
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="accountUseDarkTheme" @bind="Account.UseDarkTheme" />
-                    <label class="form-check-label" for="accountUseDarkTheme">Use dark theme</label>
-                </div>
-            </WizardStep>
-            <WizardStep Title="Summary">
-                <p>
-                    Please check your account information below before submitting.
-                </p>
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" id="accountUseDarkTheme" @bind="Account.UseDarkTheme" />
+					<label class="form-check-label" for="accountUseDarkTheme">Use dark theme</label>
+				</div>
+			</WizardStep>
+			<WizardStep Title="Summary">
+				<p>
+					Please check your account information below before submitting.
+				</p>
 
-                <ul>
-                    <li>Display name: @Account.DisplayName</li>
-                    <li>Email address: @Account.EmailAddress</li>
+				<ul>
+					<li>Display name: @Account.DisplayName</li>
+					<li>Email address: @Account.EmailAddress</li>
 
-                    @if (Account.ShowOnlineStatus) {
-                        <li>Show online status</li>
-                    }
+					@if (Account.ShowOnlineStatus) {
+						<li>Show online status</li>
+					}
 
-                    @if (Account.SendNotifications) {
-                        <li>Send notifications</li>
-                    }
+					@if (Account.SendNotifications) {
+						<li>Send notifications</li>
+					}
 
-                    @if (Account.UseDarkTheme) {
-                        <li>Use dark theme</li>
-                    }
-                </ul>
-            </WizardStep>
-        </Steps>
-    </Wizard>
+					@if (Account.UseDarkTheme) {
+						<li>Use dark theme</li>
+					}
+				</ul>
+			</WizardStep>
+		</Steps>
+	</Wizard>
 </div>
 
 @code {
-    private Wizard? Wizard { get; set; }
+	private Wizard? Wizard { get; set; }
 
-    private AccountModel Account { get; }
-    private EditContext AccountContext { get; }
+	private AccountModel Account { get; }
+	private EditContext AccountContext { get; }
 
-    public BasicWizard() {
-        Account = new();
-        AccountContext = new(Account);
-    }
+	public BasicWizard() {
+		Account = new();
+		AccountContext = new(Account);
+	}
 
-    private class AccountModel {
-        [Required(ErrorMessage = "Please enter a display name")]
-        public string? DisplayName { get; set; }
+	private class AccountModel {
+		[Required(ErrorMessage = "Please enter a display name")]
+		public string? DisplayName { get; set; }
 
-        [Required(ErrorMessage = "Please enter your email address")]
-        [EmailAddress(ErrorMessage = "Please enter a valid email address")]
-        public string? EmailAddress { get; set; }
+		[Required(ErrorMessage = "Please enter your email address")]
+		[EmailAddress(ErrorMessage = "Please enter a valid email address")]
+		public string? EmailAddress { get; set; }
 
-        public bool ShowOnlineStatus { get; set; }
+		public bool ShowOnlineStatus { get; set; }
 
-        public bool SendNotifications { get; set; }
+		public bool SendNotifications { get; set; }
 
-        public bool UseDarkTheme { get; set; }
-    }
+		public bool UseDarkTheme { get; set; }
+	}
 }
