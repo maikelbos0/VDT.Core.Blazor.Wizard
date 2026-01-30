@@ -4,7 +4,8 @@
 <h1>Events</h1>
 
 <p>
-    You can subscribe to several events during the wizard's life cycle. <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example wizard.</a>
+    You can subscribe to several events during the wizard's life cycle; most are informational only but some allow you to manipulate the wizard's behaviour.
+    <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example wizard.</a>
 </p>
 
 <ul>
@@ -34,7 +35,7 @@
     <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor/components/event-handling">Microsoft documentation on Blazor event handling</a>.
 </p>
 
-<div class="card">
+<div class="@(Wizard?.IsActive ?? false ? "card" : "")">
     <Wizard @ref="Wizard"
             ContainerClass="card-body"
             TitleContainerClass="card-title mb-3"
