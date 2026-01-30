@@ -6,8 +6,10 @@
     If the default wizard layout does not suffice, it's easy to customize the layout by using the <code>Layout</code> renderfragment and the various 
     renderfragments found on the <code>context</code> provided by it. If you provide a layout template the default container elements will not be used and
     their CSS classes will not be applied, but any properties for specific renderfragments for buttons or other common elements, such as CSS, titles and the
-    various allow options will still be applied. Available renderfragments:
+    various allow options will still be applied.
 </p>
+
+<h2>Renderfragments</h2>
 
 <ul>
     <li><code>context.DefaultLayout</code> renders the wizard title content</li>
@@ -23,9 +25,56 @@
 
 <p>
     For further customization, you can create a layout without using any renderfragments, instead using only properties and methods of the wizard that can be
-    accessed via <code>context.Wizard</code>. The example wizard rendered here does not use any of the renderfragments, instead showing how to create a
-    completely new layout with the same functionality and added navigation and indication for completed steps.
-    <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the example wizard.</a>
+    accessed via <code>context.Wizard</code>.
+</p>
+
+<h2>Wizard properties</h2>
+
+<p>This does not list Blazor parameters such as button texts or any of the CSS classes.</p>
+
+<ul>
+    <li><code>IsActive</code> indicates whether or not the wizard is currently active</li>
+    <li><code>ActiveStepIndex</code> is the index of the currently active step if the wizard is active, otherwise <code>null</code></li>
+    <li><code>ActiveStep</code> is the currently active step if the wizard is active, otherwise <code>null</code></li>
+    <li><code>IsFirstStepActive</code> indicates if the first step in the wizard is the currently active one</li>
+    <li><code>IsLastStepActive</code> indicates if the last step in the wizard is the currently active one</li>
+    <li><code>AllSteps</code> returns all available wizard steps in order of display</li>
+</ul>
+
+<h2>Wizard methods</h2>
+
+<li><code>Start()</code> opens the wizard at the first step if it's not currently active</li>
+<li><code>Stop()</code> closes and reset the wizard if it's currently active</li>
+<li><code>GoToPreviousStep()</code> goes to the previous step in this wizard if it is active and it's not on the first step</li>
+<li><code>TryCompleteStep()</code> attempts to complete the current step, then either move to the next step or complete the wizard</li>
+<li>
+    <code>GoToStep(...)</code> navigates to a specific step in the wizard if it is active, after optionally attempting to complete the currently active step
+    <ul>
+        <li>Navigating to the step after the last available step completes and resets the wizard</li>
+        <li>
+            Available overloads:
+            <ul>
+                <li><code>GoToStep(WizardStep step, bool tryCompleteStep)</code></li>
+                <li><code>GoToStep(int stepIndex, bool tryCompleteStep)</code></li>
+                <li><code>GoToStep(StepIndexProvider stepIndexProvider, bool tryCompleteStep)</code></li>
+            </ul>
+        </li>
+    </ul>
+</li>
+
+<h2>Wizard step properties</h2>
+
+<p>This does not list Blazor parameters such as <code>Title</code>.</p>
+
+<ul>
+    <li><code>IsActive</code> indicates whether or not the wizard step is currently active</li>
+    <li><code>IsCompleted</code> indicates whether or not this step has been previously completed; resets to <code>false</code> when the wizard is closed</li>
+</ul>
+
+<p>
+    The example wizard rendered here does not use any of the renderfragments, instead showing how to create a completely new layout with the same 
+    functionality and added navigation and indication for completed steps. <a class="link-primary" @onclick="async () => await Wizard!.Start()">Start the
+    example wizard.</a>
 </p>
 
 <Wizard @ref="Wizard">
